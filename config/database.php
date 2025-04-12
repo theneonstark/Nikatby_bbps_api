@@ -61,6 +61,16 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+        'external_mysql' => [
+        'driver' => 'mysql',
+        'host' => env('SECOND_DB_HOST', '127.0.0.1'),
+        'port' => env('SECOND_DB_PORT', '3306'),
+        'database' => env('SECOND_DB_DATABASE', 'paymentadminpanel'),
+        'username' => env('SECOND_DB_USERNAME', 'root'),
+        'password' => env('SECOND_DB_PASSWORD', ''),
+        'charset' => 'utf8mb4',
+        'collation' => 'utf8mb4_unicode_ci',
+    ],
 
         'mariadb' => [
             'driver' => 'mariadb',
