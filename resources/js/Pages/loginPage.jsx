@@ -17,7 +17,7 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/login', {
+        post('/userpanel3/public/login', {
             preserveScroll: true,
             onError: () => {
               console.log('Login failed');

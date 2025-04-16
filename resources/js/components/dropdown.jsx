@@ -4,16 +4,16 @@ export const Dropdown = () => {
       const value = event.target.value;
   
       if (value === "DMT2") {
-        window.location.href = "/dmt2/dashboard";
+        window.location.href = "/userpanel3/public/dmt2/dashboard";
       } else if (value === "Bus Booking") {
-        window.location.href = "/bus-booking/dashboard";
+        window.location.href = "/userpanel3/public/bus-booking/dashboard";
       } else if (value === "Recharge") {
-        window.location.href = "/recharge/dashboard";
+        window.location.href = "/userpanel3/public/recharge/dashboard";
       } else if (value === "Utilities") {
-        window.location.href = "/utilities/dashboard";
+        window.location.href = "/userpanel3/public/utilities/dashboard";
       } else if (value === "Main Dashboard")
       {
-        window.location.href = "/dashboard";
+        window.location.href = "/userpanel3/public/dashboard";
       }
     };
   

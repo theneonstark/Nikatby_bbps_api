@@ -19,7 +19,7 @@ const services = [
     description: "Find Every Type of Recharges and Bill Payment like DTH, Gas, and Water Bill.",
     icon: <Briefcase size={28} className="text-white" />,
     bgColor: "from-blue-600 to-blue-800",
-    url: "/billPay",
+    url: "/userpanel3/public/billPay",
   },
   {
     id: 3,
