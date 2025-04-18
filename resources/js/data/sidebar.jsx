@@ -5,7 +5,7 @@ import {
 
 console.log(import.meta.env.VITE_APP_SERVER);
 const BASE_URL = import.meta.env.VITE_APP_SERVER === "PRODUCTION" 
-  ? "https://uat.nikatby.in/admin/public" 
+  ? "https://demo.nikatby.in/userpanel3/public" 
   : "";
 
 console.log(BASE_URL);

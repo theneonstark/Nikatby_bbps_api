@@ -32,6 +32,9 @@ export function AppSidebar({ ...props }) {
   const { props: inertiaProps } = usePage();
   const user = inertiaProps.auth?.user;
   const userrole = user?.role || 0;
+  const BASE_URL = import.meta.env.VITE_APP_SERVER === "PRODUCTION" 
+  ? "https://demo.nikatby.in/userpanel3/public" 
+  : "";
 
   const [collapsedMenus, setCollapsedMenus] = React.useState({});
 
@@ -71,18 +74,18 @@ export function AppSidebar({ ...props }) {
     {
       title: "Dashboard",
       icon: LayoutDashboardIcon,
-      url: userrole === 1 ? "/adminDashboard" : "/dashboard",
+      url: userrole === 1 ? `${BASE_URL}/adminDashboard` : `${BASE_URL}/dashboard`,
     },
     {
       title: "Services",
       icon: ListIcon,
-      url: "/services",
+      url: `${BASE_URL}/services`,
       // subItems: [{ title: "All Services", url: "/services" }],
     },
     {
       title: "Complaint",
       icon: AlertTriangleIcon,
-      url: "/complaint",
+      url: `${BASE_URL}/complaint`,
       // subItems: [{ title: "Complaint Registarion & Track", url: "/complaint" }],
     },
     {
@@ -91,39 +94,39 @@ export function AppSidebar({ ...props }) {
       subItems: [
         {
           title: "Dashboard",
-          url: "/dmt2/dashboard",
+          url: `${BASE_URL}/dmt2/dashboard`,
         },
         {
           title: "Remitter",
           subItems: [
-            { title: "Query Remitter", url: "/DMT/queryRemitter" },
-            { title: "Remitter Aadhar verify API", url: "/DMT/remitterAadharVerify" },
-            { title: "Register Remitter", url: "/DMT/registerRemitter" },
+            { title: "Query Remitter", url: `${BASE_URL}/DMT/queryRemitter` },
+            { title: "Remitter Aadhar verify API", url: `${BASE_URL}/DMT/remitterAadharVerify` },
+            { title: "Register Remitter", url: `${BASE_URL}/DMT/registerRemitter` },
           ],
         },
         {
           title: "Beneficiary",
           subItems: [
-            { title: "Register Beneficiary", url: "/DMT/registerBeneficiary" },
-            { title: "Delete Beneficiary", url: "/DMT/deleteBeneficiary" },
-            { title: "Fetch Beneficiary", url: "/DMT/fetchBeneficiary" },
-            { title: "Fetch Beneficiary By Beneid", url: "/DMT/searchByBeneId" },
+            { title: "Register Beneficiary", url: `${BASE_URL}/DMT/registerBeneficiary` },
+            { title: "Delete Beneficiary", url: `${BASE_URL}/DMT/deleteBeneficiary` },
+            { title: "Fetch Beneficiary", url: `${BASE_URL}/DMT/fetchBeneficiary` },
+            { title: "Fetch Beneficiary By Beneid", url: `${BASE_URL}/DMT/searchByBeneId` },
           ],
         },
         {
           title: "Transaction",
           subItems: [
-            { title: "Penny Drop", url: "/DMT/pennyDropForm" },
-            { title: "Transaction Sent Otp", url: "/DMT/transactionSendOtpForm" },
-            { title: "Transaction", url: "/DMT/TranSaction" },
-            { title: "Transaction Status", url: "/DMT/transactionStatus" },
+            { title: "Penny Drop", url: `${BASE_URL}/DMT/pennyDropForm` },
+            { title: "Transaction Sent Otp", url: `${BASE_URL}/DMT/transactionSendOtpForm` },
+            { title: "Transaction", url: `${BASE_URL}/DMT/TranSaction` },
+            { title: "Transaction Status", url: `${BASE_URL}/DMT/transactionStatus` },
           ],
         },
         {
           title: "Refund",
           subItems: [
-            { title: "Refund Otp", url: "/DMT/refund" },
-            { title: "Claim Refund", url: "/DMT/claimRefund" },
+            { title: "Refund Otp", url: `${BASE_URL}/DMT/refund` },
+            { title: "Claim Refund", url: `${BASE_URL}/DMT/claimRefund` },
           ],
         },
       ],
@@ -132,29 +135,29 @@ export function AppSidebar({ ...props }) {
       title: "Bus Booking",
       icon: BusFrontIcon,
       subItems: [
-        { title: "Dashboard", url: "/bus-booking/dashboard" },
-        { title: "Get Source City", url: "/Busticket/getSourceCity" },
-        { title: "Get Available Trip", url: "/Busticket/getAvailableTrip" },
-        { title: "Get Current Trip Details", url: "/Busticket/getCurrentTripDetails" },
-        { title: "Book Tickets", url: "/Busticket/getbookTicket" },
-        { title: "Get Boarding Point Details", url: "/Busticket/getboardingpointdetails" },
-        { title: "Check Booked Tickets", url: "/Busticket/checkBookedTicket" },
+        { title: "Dashboard", url: `${BASE_URL}/bus-booking/dashboard` },
+        { title: "Get Source City", url: `${BASE_URL}/Busticket/getSourceCity` },
+        { title: "Get Available Trip", url: `${BASE_URL}/Busticket/getAvailableTrip` },
+        { title: "Get Current Trip Details", url: `${BASE_URL}/Busticket/getCurrentTripDetails` },
+        { title: "Book Tickets", url: `${BASE_URL}/Busticket/getbookTicket` },
+        { title: "Get Boarding Point Details", url: `${BASE_URL}/Busticket/getboardingpointdetails` },
+        { title: "Check Booked Tickets", url: `${BASE_URL}/Busticket/checkBookedTicket` },
       ],
     },
     {
       title: "Recharge",
-      url : userrole === 1 ? "/admin/rechargeDashboard" : undefined,
+      url : userrole === 1 ? `${BASE_URL}/admin/rechargeDashboard` : undefined,
       icon: ZapIcon,
       subItems:  userrole != 1 ? [
-        { title: "Dashboard", url: "/recharge/dashboard" },
-        { title: "Do Recharge", url: "/Recharge/dorecharge" },
-        { title: "Status Enquiry", url: "/Recharge/recharge2" },
-        { title: "Manage Operator", url: "/Recharge/manageOperator" },
+        { title: "Dashboard", url: `${BASE_URL}/recharge/dashboard` },
+        { title: "Do Recharge", url: `${BASE_URL}/Recharge/dorecharge` },
+        { title: "Status Enquiry", url: `${BASE_URL}/Recharge/recharge2` },
+        { title: "Manage Operator", url: `${BASE_URL}/Recharge/manageOperator` },
       ]: undefined,
     },
     {
       title: "LIC",
-      url :"/admin/lic",
+      url :`${BASE_URL}/admin/lic`,
       icon: BriefcaseIcon,
     },
     {
@@ -163,38 +166,38 @@ export function AppSidebar({ ...props }) {
       subItems: [
         {
           title: "Roles",
-          url: "/admin/displayroles",
+          url: `${BASE_URL}/admin/displayroles`,
         },
         {
           title: "Permissions",
-          url: "/admin/displaypermissions",
+          url: `${BASE_URL}/admin/displaypermissions`,
         },
       ]
     },
     {
       title: "Commission",
       icon: PercentIcon ,
-      url: "/admin/commission",
+      url: `${BASE_URL}/admin/commission`,
     },
     {
       title: "Member Details",
       icon: UsersIcon ,
-      url: "/admin/members",
+      url: "admin/members",
     },
     {
       title: "Bank Details",
       icon: LandmarkIcon ,
-      url: "/admin/bank",
+      url: `${BASE_URL}/admin/bank`,
     },
     {
       title: "Fund Request",
       icon: BanknoteIcon ,
-      url: "/admin/fund/request",
+      url: `${BASE_URL}/admin/fund/request`,
     },
     {
       title: "IP Whitelisting",
       icon: ShieldCheckIcon ,
-      url: "/admin/ip-whitelisting",
+      url: `${BASE_URL}/admin/ip-whitelisting`,
     },
     {
       title: "Utilities",
@@ -202,51 +205,50 @@ export function AppSidebar({ ...props }) {
       subItems: [
         {
           title: "Dashboard",
-          url: "/utilities/dashboard",
+          url: `${BASE_URL}/utilities/dashboard`,
         },
         {
           title: "Bill Payment",
-          url: "/admin/utility-bill-payment/operator-list",
-          // subItems: [
-          //   { title: "Operator List", url: "/admin/utility-bill-payment/operator-list" },
-          //   { title: "Fetch Bill Details", url: "/admin/utility-bill-payment/fetch-bill-details" },
-          //   { title: "Pay Bill", url: "/admin/utility-bill-payment/pay-bill" },
-          //   { title: "Status Enquiry", url: "/admin/utility-bill-payment/utility-status-enquiry" },
-          // ],
+          subItems: [
+            { title: "Operator List", url: "/admin/utility-bill-payment/operator-list" },
+            { title: "Fetch Bill Details", url: "/admin/utility-bill-payment/fetch-bill-details" },
+            { title: "Pay Bill", url: "/admin/utility-bill-payment/pay-bill" },
+            { title: "Status Enquiry", url: "/admin/utility-bill-payment/utility-status-enquiry" },
+          ],
         },
         {
           title: "Insurance Payment",
           subItems: [
-            { title: "Fetch Insurance Bill Details", url: "/admin/InsurancePremiumPayment/FetchInsuranceBillDetails" },
-            { title: "Pay Insurance Bill", url: "/pay-insurance-bill" },
-            { title: "Insurance Status Enquiry", url: "/admin/InsurancePremiumPayment/InsuranceStatusEnquiry" },
+            { title: "Fetch Insurance Bill Details", url: `${BASE_URL}/admin/InsurancePremiumPayment/FetchInsuranceBillDetails` },
+            { title: "Pay Insurance Bill", url: `${BASE_URL}/pay-insurance-bill` },
+            { title: "Insurance Status Enquiry", url: `${BASE_URL}/admin/InsurancePremiumPayment/InsuranceStatusEnquiry` },
           ],
         },
         {
           title: "Fastag Recharge",
           subItems: [
-            { title: "Operator List", url: "/admin/FastagRecharge/FastagOperatorList" },
-            { title: "Fetch Consumer Details", url: "/admin/FastagRecharge/fetchConsumerDetails" },
-            { title: "Recharge", url: "/admin/FastagRecharge/fastagRecharge" },
-            { title: "Status", url: "/admin/FastagRecharge/FastagStatus" },
+            { title: "Operator List", url: `${BASE_URL}/admin/FastagRecharge/FastagOperatorList` },
+            { title: "Fetch Consumer Details", url: `${BASE_URL}/admin/FastagRecharge/fetchConsumerDetails` },
+            { title: "Recharge", url: `${BASE_URL}/admin/FastagRecharge/fastagRecharge` },
+            { title: "Status", url: `${BASE_URL}/admin/FastagRecharge/FastagStatus` },
           ],
         },
         {
           title: "LPG Booking & Payment",
           subItems: [
-            { title: "Operator List", url: "/admin/LPG/LPGOperator" },
-            { title: "Fetch LPG Details", url: "/admin/LPG/FetchLPGDetails" },
-            { title: "Pay Bill", url: "/admin/LPG/LPGBill" },
-            { title: "Status", url: "/admin/LPG/LPGStatus" },
+            { title: "Operator List", url: `${BASE_URL}/admin/LPG/LPGOperator` },
+            { title: "Fetch LPG Details", url: `${BASE_URL}/admin/LPG/FetchLPGDetails` },
+            { title: "Pay Bill", url: `${BASE_URL}/admin/LPG/LPGBill` },
+            { title: "Status", url: `${BASE_URL}/admin/LPG/LPGStatus` },
           ],
         },
         {
           title: "Municipality Payment",
           subItems: [
-            { title: "Operator List", url: "/admin/Municipality/MunicipalityOperator" },
-            { title: "Fetch Municipality Details", url: "/admin/Municipality/FetchMunicipalityDetails" },
-            { title: "Pay Bill", url: "/admin/Municipality/MunicipalityBill" },
-            { title: "Status", url: "/admin/Municipality/MunicipalityStatus" },
+            { title: "Operator List", url: `/admin/Municipality/MunicipalityOperator` },
+            { title: "Fetch Municipality Details", url: `${BASE_URL}/admin/Municipality/FetchMunicipalityDetails` },
+            { title: "Pay Bill", url: `${BASE_URL}/admin/Municipality/MunicipalityBill` },
+            { title: "Status", url: `${BASE_URL}/admin/Municipality/MunicipalityStatus` },
           ],
         },
       ],

@@ -57,7 +57,7 @@ const ComplaintForm = () => {
               </div>
 
               <div className="mt-6 text-right">
-                <motion.a href="/complaintRResult" whileHover={{ scale: 1.05 }}>
+                <motion.a href="/userpanel3/public/complaintRResult" whileHover={{ scale: 1.05 }}>
                   <button className="bg-green-600 text-white px-6 py-3 rounded-md shadow-lg hover:bg-green-700 transition-all">Submit</button>
                 </motion.a>
               </div>
