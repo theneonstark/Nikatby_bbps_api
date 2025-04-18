@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Beneficiary extends Model
 {
+    use HasFactory;
     protected $fillable = [
-        'mobile', 'benename', 'bankid', 'accno', 'ifsccode', 'verified',
+        'mobile', 'status', 'responsecode', 'beneid', 'bankid', 'bankname', 'beneficiary_name','accountnumber','ifsccode','verified','banktype','userstatus','bank3','message',
     ];
 }

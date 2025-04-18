@@ -179,7 +179,7 @@ export function AppSidebar({ ...props }) {
     {
       title: "Member Details",
       icon: UsersIcon ,
-      url: "admin/members",
+      url: "/admin/members",
     },
     {
       title: "Bank Details",
@@ -206,12 +206,13 @@ export function AppSidebar({ ...props }) {
         },
         {
           title: "Bill Payment",
-          subItems: [
-            { title: "Operator List", url: "/admin/utility-bill-payment/operator-list" },
-            { title: "Fetch Bill Details", url: "/admin/utility-bill-payment/fetch-bill-details" },
-            { title: "Pay Bill", url: "/admin/utility-bill-payment/pay-bill" },
-            { title: "Status Enquiry", url: "/admin/utility-bill-payment/utility-status-enquiry" },
-          ],
+          url: "/admin/utility-bill-payment/operator-list",
+          // subItems: [
+          //   { title: "Operator List", url: "/admin/utility-bill-payment/operator-list" },
+          //   { title: "Fetch Bill Details", url: "/admin/utility-bill-payment/fetch-bill-details" },
+          //   { title: "Pay Bill", url: "/admin/utility-bill-payment/pay-bill" },
+          //   { title: "Status Enquiry", url: "/admin/utility-bill-payment/utility-status-enquiry" },
+          // ],
         },
         {
           title: "Insurance Payment",

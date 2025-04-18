@@ -12,9 +12,19 @@ import Navbar from "@/Layouts/newLayout/navbar";
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+// import useAdminOnly from '@/Hooks/useAdminOnly'
+import { usePage, router } from '@inertiajs/react'
+
 
 
 const Dashboard = () => {
+   const { auth } = usePage().props
+  const user = auth?.user
+    if (!user) return // wait until user is available
+
+    if (user.role !== 1) {
+      router.visit('/unauthorized') // Redirect non-admin
+    }
   const [currentMonth, setCurrentMonth] = useState('2021.06');
   const [dateRange, setDateRange] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,6 +42,7 @@ const [weeklyIncrease, setWeeklyIncrease] = useState(0);
 
 // Calculate percentages dynamically
 useEffect(() => {
+  
   // Total Beneficiaries
   const total = (beneficary1?.length || 0) + (beneficary2?.length || 0);
   setTotalBeneficiaries(total);
@@ -190,8 +201,10 @@ const walletData = {
   const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
   const colors=['bg-violet-500' ,'bg-green-500','bg-yellow-500','bg-blue-500']
+  
 
   return (
+    
     <SidebarProvider>
                 <AppSidebar variant="inset" />
                 <SidebarInset>

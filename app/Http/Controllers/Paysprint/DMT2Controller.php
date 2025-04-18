@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Paysprint;
 use App\Models\Beneficiary;
 use App\Models\Registerremitter;
 use App\Models\Remitter;
+use App\Models\RemitterAadharVerify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
@@ -18,19 +19,21 @@ class DMT2Controller
         return Auth::id() ? Auth::id() : Inertia::render('loginPage');
     }
     public function searchRemitter(Request $request)
-    {         
+    {    
         // Validate mobile number
         $request->validate([
             'mobile' => 'required|digits:10'
         ]);
+        // dd($request->all());     
         
         // API endpoint and headers
-        $url = 'https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/remitter/queryremitter';
+        $url = 'https://uat.nikatby.in/forwarding/public/api/dmt2/Remitter2/queryRemitter';
         $headers = [
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Content-Type' => 'application/json',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
-            'accept' => 'application/json',
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'Content-Type' => 'application/json',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
+            // 'accept' => 'application/json',
         ];
         
         // Body data to be sent
@@ -38,18 +41,20 @@ class DMT2Controller
             'mobile' => $request->mobile,
         ];
         
+        
         try {
             $count = 0;
             // dd($url);
             // Sending the POST request with headers and body
             $response = Http::withHeaders($headers)->post($url, $body);
             if ($response->successful()) {
+                // dd(Auth::id());
                 $count++;
-                $status = $response['status'] ?? false;
-                $responsecode = $response['response_code'] ?? 0;
-                $message = $response['message'] ?? 'No Message';
-                $limit = $response['data']['limit'] ?? null;
-                $mobile = $response['data']['mobile'] ?? null;
+                $status = $response['data']['status'] ?? false;
+                $responsecode = $response['data']['response_code'] ?? 0;
+                $message = $response['data']['message'];
+                $limit = $response['data']['data']['limit'] ?? null;
+                $mobile = $response['data']['data']['mobile'] ?? null;
                 // $uid = Auth::id() ?? null;
                 // dd($uid);
                 // dd($mobile);
@@ -67,8 +72,9 @@ class DMT2Controller
                 );
                 return response()->json([
                     'remitter' => [
-                        'name' => $response['message'],
-                        'mobile' => $response['data']['mobile'],
+                        'data' => $response->json(),
+                        'name' => $response['data']['message'],
+                        'mobile' => $response['data']['data']['mobile'],
                     ]
                 ], 200);
                 // // dd("HI");
@@ -107,12 +113,13 @@ class DMT2Controller
             'aadhaar_no' => ['required', 'digits:16'],
         ]);
     
-        $url = 'https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/remitter/queryremitter/aadhar_verify';
+        $url = 'https://uat.nikatby.in/forwarding/public/api/dmt2/Remitter2/verifyAadhaar';
         $headers = [
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Content-Type' => 'application/json',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
-            'accept' => 'application/json',
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'Content-Type' => 'application/json',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
+            // 'accept' => 'application/json',
         ];
     
         $body = [
@@ -126,18 +133,19 @@ class DMT2Controller
             // dd($response['message']);
     
             if ($response->successful()) {
-                Remitter::updateOrCreate(
+                // dd($response['apiData']['stateresp']);
+                RemitterAadharVerify::updateOrCreate(
                     ['mobile' => $request->mobile] ?? null,
                     [
-                    'status' => $response['status'] ?? false,
-                    'response_code' => $response['response_code'] ?? null,
-                    'message' => $response['message'] ?? null,
-                    'stateresp' => $response['stateresp'] ?? null,
+                    'status' => $response['apiData']['status'] ?? false,
+                    'response_code' => $response['apiData']['response_code'] ?? '0',
+                    'message' => $response['apiData']['message'] ?? null,
+                    'stateresp' => $response['apiData']['stateresp'] ?? "NOt Applicable",
                     'aadhaar_no' => $request->aadhaar_no
                 ]);
                 return response()->json([
                     'success' => true,
-                    'message' => $response['stateresp'],
+                    'message' => $response['apiData']['stateresp'],
                     'data' => $response->json(),
                 ], 200);
             } else {
@@ -168,12 +176,13 @@ class DMT2Controller
             'isIris' => 'required|string',
         ]);
     
-        $url = 'https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/remitter/registerremitter';
+        $url = 'https://uat.nikatby.in/forwarding/public/api/dmt2/Remitter2/registerRemitter';
         $headers = [
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Content-Type' => 'application/json',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
-            'accept' => 'application/json',
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'Content-Type' => 'application/json',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
+            // 'accept' => 'application/json',
         ];
     
         $body = [
@@ -189,12 +198,13 @@ class DMT2Controller
             $response = Http::withHeaders($headers)->post($url, $body);
     
             if ($response->successful()) {
+                // dd($validatedData['state_response']);
                 // Store or update the remitter record
                 Registerremitter::updateOrCreate(
                     ['mobile' => $validatedData['mobile']],
                     [
                         'userId' => Auth::id(),
-                        'otp' => $validatedData['otp'],
+                        'otp' => $request->otp,
                         'state_response' => $validatedData['state_response'],  // Field name consistency with frontend
                         'pid' => $validatedData['pid'],
                         'accessMode' => $validatedData['accessMode'],
@@ -235,12 +245,13 @@ class DMT2Controller
             'ifsccode' => 'required|string',
             'verified' => 'required|in:0,1',
         ]);
-        $url = "https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/beneficiary/registerbeneficiary";
+        $url = "https://uat.nikatby.in/forwarding/public/api/dmt2/beneficiaries/register";
         $headers = [
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Content-Type' => 'application/json',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
-            'accept' => 'application/json',
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'Content-Type' => 'application/json',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
+            // 'accept' => 'application/json',
         ];
         $body = [
             'mobile' => $validatedData['mobile'],
@@ -256,28 +267,28 @@ class DMT2Controller
             //     dd($response['data']['bene_id']);
             // }
             if($response->successful()){
-                // dd($response->json());
+                // dd($response['responseData']['message']);
         // Store or update the beneficiary record
-                // Beneficiary::updateOrCreate(
-                //     ['mobile' => $request->mobile ?? null],
-                //     [
-                //      'status' => $response['status'] ?? false,
-                //      'responsecode' => $response['response_code'] ?? null,
-                //      'beneid' => $response['data']['bene_id'] ?? null,
-                //      'bankid' => $response['data']['bankid'] ?? null,
-                //      'bankname' => $response['data']['bankname'] ?? null,
-                //      'beneficiary_name' => $response['data']['name'] ?? null,
-                //      'accountnumber' => $response['data']['accno'] ?? null,
-                //      'ifsccode' => $response['data']['ifsc'] ?? null,
-                //      'verified' => $response['data']['verified'] ?? null,
-                //      'banktype' => $response['data']['banktype'] ?? null,
-                //      'userstatus'   => $response['data']['status'] ?? null,
-                //      'bank3'    => $response['data']['bank3'] ?? null,
-                //      'message'  => $response['message'] ?? "No Message",
-                //     ]
-                // );
+                Beneficiary::updateOrCreate(
+                    ['mobile' => $request->mobile ?? null],
+                    [
+                     'status' => $response['responseData']['status'] ?? false,
+                     'responsecode' => $response['responseData']['response_code'] ?? null,
+                     'beneid' => $response['responseData']['data']['bene_id'] ?? null,
+                     'bankid' => $response['responseData']['data']['bankid'] ?? null,
+                     'bankname' => $response['responseData']['data']['bankname'] ?? null,
+                     'beneficiary_name' => $response['responseData']['data']['name'] ?? null,
+                     'accountnumber' => $response['responseData']['data']['accno'] ?? null,
+                     'ifsccode' => $response['responseData']['data']['ifsc'] ?? null,
+                     'verified' => $response['responseData']['data']['verified'] ?? "0",
+                     'banktype' => $response['responseData']['data']['banktype'] ?? null,
+                     'userstatus'   => $response['responseData']['data']['status'] ?? null,
+                     'bank3'    => $response['responseData']['data']['bank3'] ?? null,
+                     'message'  => $response['responseData']['message'] ?? "No Message",
+                    ]
+                );
                 return response()->json([
-                    'message' => $response['message'],
+                    'message' => $response['responseData']['message'],
                     'data' => $response->json(),
                 ]);
             }
@@ -299,7 +310,7 @@ class DMT2Controller
            'mobile' => 'required|digits:10',
            'beneficiaryId' => 'required|numeric',
        ]);  
-       $url = "https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/beneficiary/registerbeneficiary/deletebeneficiary";
+       $url = "http://127.0.0.1:8000/api/dmt2/beneficiaries/destroy";
        $headers = [
         'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
         'Content-Type' => 'application/json',
@@ -314,25 +325,37 @@ class DMT2Controller
        try {
             $response = Http::withHeaders($headers)->post($url, $body);
             if($response->successful()){
+                // dd('comings');
+                $beneficiary = Beneficiary::where('mobile', $request->mobile)
+               ->where('beneid', $request->beneficiaryId)
+               ->first(); 
+               if (!$beneficiary) {
+                return response()->json(['success' => false, 'message' => 'Beneficiary not found.'], 404);
+                } 
+                else
+                { 
+                $beneficiary->delete();
+            //    dd($beneficiary);
                 return response()->json([
                     'status' => true,
-                    'message' => $response['message'],
+                    'message' => $response['response']['message'],
                 ]);
+             }
             }
             else{
                 return response()->json([
                     'status' => false,
-                    'message' => $response['message'],
+                    'message' => $response['response']['message'],
                 ]);
             }
-            $beneficiary = Beneficiary::where('mobile', $validated['mobile'])
-               ->where('id', $validated['beneficiaryId'])
-               ->first();   
-           if (!$beneficiary) {
-               return response()->json(['success' => false, 'message' => 'Beneficiary not found.'], 404);
-           }   
-           $beneficiary->delete();   
-           return response()->json(['success' => true, 'message' => 'Beneficiary deleted successfully.']);
+        //     $beneficiary = Beneficiary::where('mobile', $validated['mobile'])
+        //        ->where('id', $validated['beneficiaryId'])
+        //        ->first();   
+        //    if (!$beneficiary) {
+        //        return response()->json(['success' => false, 'message' => 'Beneficiary not found.'], 404);
+        //    }   
+        //    $beneficiary->delete();   
+        //    return response()->json(['success' => true, 'message' => 'Beneficiary deleted successfully.']);
        } catch (\Exception $e) {
            return response()->json(['success' => false, 'message' => 'Deletion failed.', 'error' => $e->getMessage()], 500);
        }
@@ -346,7 +369,7 @@ class DMT2Controller
         $validated = $request->validate([
             'mobile' => 'required|digits:10',
         ]);
-        $url = "https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/beneficiary/registerbeneficiary/fetchbeneficiary";
+        $url = "http://127.0.0.1:8000/api/dmt2/beneficiaries/fetch";
         $headers = [
             'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
             'Content-Type' => 'application/json',
@@ -360,24 +383,25 @@ class DMT2Controller
         try {
             $response = Http::withHeaders($headers)->post($url, $body);
             if($response->successful()){
+                $beneficiary = Beneficiary::where('mobile', $request->mobile)->first();
+                if (!$beneficiary) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => "Beneficiary Not Exist.",
+                    ]);
+                }
                 return response()->json([
                     'status' => true,
-                    'message' => $response->json(),
+                    'message' => 'Beneficiary Successfully Fetched',
+                    'data' => $beneficiary
                 ]);
             }
             else{
                 return response()->json([
-                    'status' => true,
-                    'message' => $response['bankname'],
+                    'status' => false,
+                    'message' => "Beneficiary Not Exist Or Might be some technical issues facing.",
                 ]);
             }
-            $beneficiary = Beneficiary::where('mobile', $validated['mobile'])->get();
-
-            if ($beneficiary->isEmpty()) {
-                return response()->json(['success' => false, 'message' => 'Beneficiary not found.'], 404);
-            }
-
-            return response()->json(['success' => true, 'data' => $beneficiary]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while fetching beneficiary.', 'error' => $e->getMessage()], 500);
         }
@@ -392,7 +416,7 @@ class DMT2Controller
             'mobile' => 'required|digits:10',
             'bene_id' => 'required|numeric',
         ]);
-        $url = "https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/beneficiary/registerbeneficiary/fetchbeneficiarybybeneid";
+        $url = "http://127.0.0.1:8000/api/dmt2/beneficiaries/fetchBeneficiaryData";
         $headers = [
             'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
             'Content-Type' => 'application/json',
@@ -407,26 +431,27 @@ class DMT2Controller
         try {
             $response = Http::withHeaders($headers)->post($url, $body);
             if($response->successful()){
+                $beneficiary = Beneficiary::where('mobile', $request->mobile)
+                ->where('beneid', $request->bene_id)
+                ->first();
+                if (!$beneficiary) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Beneficiary not exist.',
+                    ]);
+                }
                 return response()->json([
                     'status' => true,
-                    'message' => $response->json(),
+                    'data' => $beneficiary,
+                    'message' => "Fetched Successfuly"
                 ]);
             }
             else{
                 return response()->json([
-                    'status' => true,
-                    'message' => $response['bankname'],
+                    'status' => false,
+                    'message' => "Beneficiary not exist or Facing Technical Glitch.",
                 ]);
             }
-            $beneficiary = Beneficiary::where('mobile', $validated['mobile'])
-                ->where('bene_id', $validated['bene_id'])
-                ->first();
-
-            if (!$beneficiary) {
-                return response()->json(['success' => false, 'message' => 'Beneficiary not found.'], 404);
-            }
-
-            return response()->json(['success' => true, 'data' => $beneficiary]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while searching.', 'error' => $e->getMessage()], 500);
         }
@@ -449,7 +474,7 @@ class DMT2Controller
             'gst_state' => 'required',
             'bene_id' => 'required',
         ]);
-        $url = "https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/beneficiary/registerbeneficiary/benenameverify";
+        $url = "http://127.0.0.1:8000/api/dmt2/Transaction2/pennyDrop";
         $headers = [
             'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
             'Content-Type' => 'application/json',
@@ -499,11 +524,12 @@ class DMT2Controller
     }
     public function transactionSendOtp(Request $request)
     {
+        // dd($request->all());
         $validator = $request->validate([
-            'mobile' => 'required|digits:10',
-            'referenceid' => 'required|string',
+            'mobile_number' => 'required|digits:10',
+            'reference_id' => 'required|string',
             'bene_id' => 'required|string',
-            'txntype' => 'required|in:debit,credit',
+            'txntype' => 'required|in:imps,neft', // Updated here
             'amount' => 'required|numeric',
             'pincode' => 'nullable|digits:6',
             'address' => 'nullable|string',
@@ -512,11 +538,12 @@ class DMT2Controller
             'lat' => 'nullable|numeric',
             'long' => 'nullable|numeric',
         ]);
+        // dd('OTP');
         // if ($validator->fails()) {
         //     return response()->json(['errors' => $validator->errors()], 422);
         // }
         // dd('otp');
-        $url = "https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/transact/transact/send_otp";
+        $url = "http://127.0.0.1:8000/api/dmt2/Transaction2/transactionSentOtp";
         $headers = [
             'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
             'Content-Type' => 'application/json',
@@ -524,8 +551,8 @@ class DMT2Controller
             'accept' => 'application/json',
          ];
          $body = [
-                'mobile' => $validator['mobile'],
-                'referenceid' => $validator['referenceid'],
+                'mobile' => $validator['mobile_number'],
+                'referenceid' => $validator['reference_id'],
                 'bene_id' => $validator['bene_id'],
                 'txntype' => $validator['txntype'],
                 'dob' => $validator['dob'],
@@ -544,7 +571,7 @@ class DMT2Controller
                 // dd('dhbfhf');
                 $response = [
                     'success' => true,
-                    'message' => 'Transaction Successful',
+                    'message' => 'Transaction Successful1',
                     'data' => $response->json()
                 ];
             }
@@ -568,6 +595,7 @@ class DMT2Controller
     }
     public function TranSactionStore(Request $request){
         // dd('rGSDFGs');
+        // dd($request->all());
         $validatedData = $request->validate([
             'mobile' => 'required|string',
             'referenceid' => 'required|string',
@@ -590,7 +618,7 @@ class DMT2Controller
                 'Content-Type' => 'application/json',
                 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
                 'accept' => 'application/json',
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/transact/transact', $validatedData);
+            ])->post('http://127.0.0.1:8000/api/dmt2/Transaction2/transaction', $validatedData);
 
             if ($response->successful()) {
                 // dd('bdbd');
@@ -621,7 +649,7 @@ class DMT2Controller
                 'Content-Type' => 'application/json',
                 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
                 'accept' => 'application/json',
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/transact/transact/querytransact', $validatedData);
+            ])->post('http://127.0.0.1:8000/api/dmt2/Transaction2/transactionStatus', $validatedData);
 
             if ($response->successful()) {
                 return response()->json($response->json(), 200);
@@ -649,11 +677,12 @@ class DMT2Controller
 
         try {
             $response = Http::withHeaders([
-                'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                'Content-Type' => 'application/json',
-                'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
-                'accept' => 'application/json',
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/refund/refund/resendotp', $body);
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                // 'Content-Type' => 'application/json',
+                // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
+                // 'accept' => 'application/json',
+            ])->post('https://uat.nikatby.in/forwarding/public/api/dmt2/Refund2/refundOtp', $body);
 
             if ($response->successful()) {
                 return response()->json($response->json(), 200);
@@ -677,7 +706,7 @@ class DMT2Controller
             'referenceid' => 'required|string',
             'otp' => 'required|string',
         ]);
-        $url = "https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/refund/refund/";
+        $url = "https://uat.nikatby.in/forwarding/public/api/dmt2/Refund2/processRefund";
         $body = [
             'referenceid' => $validatedData['referenceid'],
             'ackno' => $validatedData['ackno'],
@@ -686,10 +715,11 @@ class DMT2Controller
 
         try {
             $response = Http::withHeaders([
-                'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                'Content-Type' => 'application/json',
-                'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
-                'accept' => 'application/json',
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                // 'Content-Type' => 'application/json',
+                // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3NDMyMjk2MDcsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzQzMjI5NjA3In0.aczBhvb53rst9BlgRB_L-ePFzKfNQTXPRUKUtezvfxM',
+                // 'accept' => 'application/json',
             ])->post($url, $body);
 
             if ($response->successful()) {

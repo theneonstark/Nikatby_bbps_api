@@ -146,6 +146,7 @@ Route::middleware('auth')->group(function () {
     //Utilities Bill Payment Route Start
     Route::get('/admin/utility-bill-payment/operator-list', [UtilitybillPaymentController::class, 'operatorList'])
         ->name('utilitybillPayment.operatorList');
+    Route::get('/utility-category/{category}', [UtilityBillPaymentController::class, 'categoryDetail']);
     Route::get('/operator-list', [UtilityBillPaymentController::class, 'operatorList'])->name('operator.list');
     
     //Fetch Bill Details
@@ -247,28 +248,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/recharge/dashboard', [DashboardController::class, 'dashboardRecharge']);
     Route::get('/utilities/dashboard', [DashboardController::class, 'dashboardUtilities']);
     //Dashboard Route for various dashboard end
-});
-// Route::get('/dashboard', function () {
-//     return Inertia::render('dashboard',[
-//         'user' => isset(auth()->user()->name) ? auth()->user()->name: ' '
-//     ]);
-// })->middleware('auth');
-
-
-Route::get('/registration', function () {
-    return Inertia::render('registrationForm');
-});
-Route::get('/', function () {
-    return Inertia::render('loginPage');
-})->name('login');
-Route::post('/register', [AuthAuthanticationController::class, 'store']);
-Route::post('/login', [AuthanticationController::class, 'login']);
-Route::get('/logout', [AuthanticationController::class, 'logout']);
-
-
-//Paysprint route start here
-Route::get('/logincheck', [DMT2Controller::class, 'loginCheck']);
-
 
 
 
@@ -357,97 +336,129 @@ Route::post('/admin/refund2/processRefund', [Refund2Controller::class, 'processR
 
 
 
+
+
+
+});
+
+
+
+
 //Another Routes for admin use only start
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/adminDashboard',[AdminController::class,'dashboard'])->name('admin.recharge');
+    Route::get('/admin/rechargeDashboard',[AdminController::class,'recharge'])->name('admin.recharge');
 
-Route::get('/adminDashboard',[AdminController::class,'dashboard'])->name('admin.recharge');
-Route::get('/admin/rechargeDashboard',[AdminController::class,'recharge'])->name('admin.recharge');
+    Route::get('/admin/wallet-balance', [AdminController::class, 'getWalletBalance'])
+    ->name('admin.wallet-balance');
 
-Route::get('/admin/wallet-balance', [AdminController::class, 'getWalletBalance'])
-->name('admin.wallet-balance');
+    Route::get('/admin/credit-balance', [AdminController::class, 'getCreditBalance'])
+    ->name('admin.credit-balance');
 
-Route::get('/admin/credit-balance', [AdminController::class, 'getCreditBalance'])
-->name('admin.credit-balance');
+    Route::get('/admin/lic', [LicController::class,'licdashboard'])
+    ->name('admin.licdashboard');
+    Route::post('/admin/licdata',[LicController::class,'fetchlicdata'])->name('admin.fetchlicdata');
 
-Route::get('/admin/lic', [LicController::class,'licdashboard'])
-->name('admin.licdashboard');
-Route::post('/admin/licdata',[LicController::class,'fetchlicdata'])->name('admin.fetchlicdata');
-
-//Another Routes for admin use only end
-
-
-//permissions 
-Route::post('/admin/roles',[MainController::class,'roles'])->name('admin.roles');
-Route::get('/admin/displaypermissions',[MainController::class,'displaypermissions'])->name('admin.displaypermissions');
-Route::post('/admin/permissions',[MainController::class,'permissions'])->name('admin.permissions');
-Route::post('/admin/addnew/permission',[MainController::class,'addpermission'])->name('admin.newpermission');
-Route::post('/admin/update/permission/{id}',[MainController::class,'updatepermission'])->name('admin.updatepermission');
-Route::post('/admin/delete/permission/{id}',[MainController::class,'deletepermission'])->name('admin.deletepermission');
-
-//Roles only admin access start
-Route::get('/admin/displayroles',[MainController::class,'displayroles'])->name('admin.roles');
-Route::post('/admin/roles', [MainController::class, 'getRoles']); // Fetch all roles
-Route::post('/admin/addnew/role', [MainController::class, 'addRole']); // Add a new role
-Route::post('/admin/update/role/{id}', [MainController::class, 'updateRole']); // Update a role
-Route::post('/admin/delete/role/{id}', [MainController::class, 'deleteRole']); // Delete a role
-Route::post('/admin/role/{id}/permissions', [MainController::class, 'updateRolePermissions']); // Update role permissions
-//Roles only admin acces end
+    //Another Routes for admin use only end
 
 
-// Member routes
-Route::get('/admin/members', [MemberController::class, 'memberdashboard'])->name('admin.members');
-Route::post('/admin/member/fetchdetails', [MemberController::class, 'fetchmember'])->name('admin.memberdetails');
-Route::post('/admin/member/add', [MemberController::class, 'addMember'])->name('admin.member.add');
-Route::delete('/admin/member/delete/{id}', [MemberController::class, 'deleteMember'])->name('admin.member.delete');
+    //permissions 
+    Route::post('/admin/roles',[MainController::class,'roles'])->name('admin.roles');
+    Route::get('/admin/displaypermissions',[MainController::class,'displaypermissions'])->name('admin.displaypermissions');
+    Route::post('/admin/permissions',[MainController::class,'permissions'])->name('admin.permissions');
+    Route::post('/admin/addnew/permission',[MainController::class,'addpermission'])->name('admin.newpermission');
+    Route::post('/admin/update/permission/{id}',[MainController::class,'updatepermission'])->name('admin.updatepermission');
+    Route::post('/admin/delete/permission/{id}',[MainController::class,'deletepermission'])->name('admin.deletepermission');
 
-// bank details
-Route::get('/admin/bank', [BankController::class, 'bankdashboard'])->name('admin.bank');
-Route::post('/admin/bank/fetchbankdetails', [BankController::class, 'fetchbankdetails'])->name('admin.bankdetails');
-Route::post('/admin/bank/activate', [BankController::class, 'activateBank']);
-Route::post('/admin/bank/deactivate', [BankController::class, 'deactivateBank']);
-
-
-// Commission routes
-Route::get('/admin/commissions/{userId}', [CommissionController::class, 'getCommissions'])->name('admin.commissions.get');
-Route::post('/admin/commissions/{userId}', [CommissionController::class, 'updateCommissions'])->name('admin.commissions.update');
-
-
-
-// recharge commission
-Route::get('/admin/commission',[AdminController::class,'commission'])->name('admin.recharge');
-Route::post('/admin/recharge/commission',[AdminController::class,'rechargecommission'])->name('admin.commission');
-Route::put('/admin/update-commission-recharge/{id}', [AdminController::class, 'updateRechargeCommission']);
+    //Roles only admin access start
+    Route::get('/admin/displayroles',[MainController::class,'displayroles'])->name('admin.roles');
+    Route::post('/admin/roles', [MainController::class, 'getRoles']); // Fetch all roles
+    Route::post('/admin/addnew/role', [MainController::class, 'addRole']); // Add a new role
+    Route::post('/admin/update/role/{id}', [MainController::class, 'updateRole']); // Update a role
+    Route::post('/admin/delete/role/{id}', [MainController::class, 'deleteRole']); // Delete a role
+    Route::post('/admin/role/{id}/permissions', [MainController::class, 'updateRolePermissions']); // Update role permissions
+    //Roles only admin acces end
 
 
-//airtel commission
-Route::get('/admin/cms-airtel',[CMSController::class,'cmsairteldashboard'])->name('admin.airtel');
-Route::post('/admin/cms-airtel-fetch',[CMSController::class,'cms_airtel_fetch'])->name('admin.fetchairtel');
+    // Member routes
+    Route::get('/admin/members', [MemberController::class, 'memberdashboard'])->name('admin.members');
+    Route::post('/admin/member/fetchdetails', [MemberController::class, 'fetchmember'])->name('admin.memberdetails');
+    Route::post('/admin/member/add', [MemberController::class, 'addMember'])->name('admin.member.add');
+    Route::delete('/admin/member/delete/{id}', [MemberController::class, 'deleteMember'])->name('admin.member.delete');
+
+    // bank details
+    Route::get('/admin/bank', [BankController::class, 'bankdashboard'])->name('admin.bank');
+    Route::post('/admin/bank/fetchbankdetails', [BankController::class, 'fetchbankdetails'])->name('admin.bankdetails');
+    Route::post('/admin/bank/activate', [BankController::class, 'activateBank']);
+    Route::post('/admin/bank/deactivate', [BankController::class, 'deactivateBank']);
+
+
+    // Commission routes
+    Route::get('/admin/commissions/{userId}', [CommissionController::class, 'getCommissions'])->name('admin.commissions.get');
+    Route::post('/admin/commissions/{userId}', [CommissionController::class, 'updateCommissions'])->name('admin.commissions.update');
 
 
 
-
-//utility commission
-Route::post('/admin/utility/commission', [AdminController::class, 'fetchUtilityCommission']);
-Route::put('/admin/update-commission-utility/{id}', [AdminController::class, 'updateUtilityCommission']);
-
-Route::post('/admin/gasfastag/commission', [AdminController::class, 'fetchGasfastagCommission']);
-Route::put('/admin/update-commission-gasfastag/{id}', [AdminController::class, 'updateGasfastagCommission']);
+    // recharge commission
+    Route::get('/admin/commission',[AdminController::class,'commission'])->name('admin.recharge');
+    Route::post('/admin/recharge/commission',[AdminController::class,'rechargecommission'])->name('admin.commission');
+    Route::put('/admin/update-commission-recharge/{id}', [AdminController::class, 'updateRechargeCommission']);
 
 
-//cms commission
-Route::post('/admin/cms/commission', [AdminController::class, 'fetchCmsCommission']);
-Route::put('/admin/update-commission-cms/{id}', [AdminController::class, 'updateCmsCommission']);
-
-//dmt commission
-
-Route::post('/admin/dmt-bank1/commission', [AdminController::class, 'fetchBank1Commission']);
-Route::post('/admin/dmt-bank2/commission', [AdminController::class, 'fetchBank2Commission']);
-Route::put('/admin/update-commission-bank/{id}', [AdminController::class, 'updateBankCommission']);
+    //airtel commission
+    Route::get('/admin/cms-airtel',[CMSController::class,'cmsairteldashboard'])->name('admin.airtel');
+    Route::post('/admin/cms-airtel-fetch',[CMSController::class,'cms_airtel_fetch'])->name('admin.fetchairtel');
 
 
 
-Route::get('/admin/fund/request', function () {
-    return Inertia::render('AdminDashboard/fundRequest'); // Replace with your actual component name
+
+    //utility commission
+    Route::post('/admin/utility/commission', [AdminController::class, 'fetchUtilityCommission']);
+    Route::put('/admin/update-commission-utility/{id}', [AdminController::class, 'updateUtilityCommission']);
+
+    Route::post('/admin/gasfastag/commission', [AdminController::class, 'fetchGasfastagCommission']);
+    Route::put('/admin/update-commission-gasfastag/{id}', [AdminController::class, 'updateGasfastagCommission']);
+
+
+    //cms commission
+    Route::post('/admin/cms/commission', [AdminController::class, 'fetchCmsCommission']);
+    Route::put('/admin/update-commission-cms/{id}', [AdminController::class, 'updateCmsCommission']);
+
+    //dmt commission
+
+    Route::post('/admin/dmt-bank1/commission', [AdminController::class, 'fetchBank1Commission']);
+    Route::post('/admin/dmt-bank2/commission', [AdminController::class, 'fetchBank2Commission']);
+    Route::put('/admin/update-commission-bank/{id}', [AdminController::class, 'updateBankCommission']);
+
+
+
+    Route::get('/admin/fund/request', function () {
+        return Inertia::render('AdminDashboard/fundRequest'); // Replace with your actual component name
+    });
+    Route::get('/admin/ip-whitelisting', function () {
+        return Inertia::render('AdminDashboard/ipwhitelist'); // Replace with your actual component name
+    });
 });
-Route::get('/admin/ip-whitelisting', function () {
-    return Inertia::render('AdminDashboard/ipwhitelist'); // Replace with your actual component name
-});
+
+
+
+//Login crediantials start
+
+Route::get('/registration', function () {
+    return Inertia::render('registrationForm');
+})->name('registration');
+Route::get('/', function () {
+    return Inertia::render('loginPage');
+})->name('login');
+Route::post('/register', [AuthanticationController::class, 'store']);
+
+Route::post('/login', [AuthanticationController::class, 'login']);
+Route::get('/logout', [AuthanticationController::class, 'logout']);
+
+
+//Paysprint route start here
+Route::get('/logincheck', [DMT2Controller::class, 'loginCheck']);
+
+Route::get('/unauthorized', function () {
+    return Inertia::render('Unauthorized');
+})->name('unauthorized');

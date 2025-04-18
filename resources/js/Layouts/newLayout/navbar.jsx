@@ -45,6 +45,7 @@ const Navbar = () => {
         setIsLoadingCredit(true);
         const result = await balanceApi.getCreditBalance;
         // return result.balance;
+        console.log('credit balance'. result.balance)
         // const result = await balanceApi.getCreditBalance();
         console.log(result)
         
@@ -129,6 +130,7 @@ const Navbar = () => {
             <p className="text-sm font-medium">Admin User</p>
             <p className="text-xs text-gray-500">{user}</p>
           </div>
+          <p className="text font-bold"><a href='/logout'>Logout</a></p>
         </div>
 
       </div>

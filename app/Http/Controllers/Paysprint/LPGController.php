@@ -16,46 +16,65 @@ class LPGController
         return Inertia::render('LPG/LPGOperator');
     }
     public function fetchLPGOperator(Request $request)
-    {
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M'
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/lpg/getoperator', [
-            'mode' => $request->mode
-        ]);
+{
+    $response = Http::withHeaders([
+        "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+    ])->post('https://uat.nikatby.in/forwarding/public/api/utility/LPG/fetchLPGOperator', [
+        'mode' => $request->mode
+    ]);
 
-        $data = $response->json();
+    $data = $response->json();
 
-        if (isset($data['data'])) {
-            foreach ($data['data'] as $item) {
-                LpgOperator::updateOrCreate(
-                    ['id' => $item['id']],
-                    [
-                        'name' => $item['name'], 
-                        'category' => $item['category'],
-                        'viewbill' => $item['viewbill'],
-                        'regex' => $item['regex'] ?? null,
-                        'displayname' => $item['displayname'] ?? null,
-                        'ad1_d_name' => $item['ad1_d_name'] ?? null,
-                        'ad1_name' => $item['ad1_name'] ?? null,
-                        'ad1_regex' => $item['ad1_regex'] ?? null,
-                        'ad2_d_name' => $item['ad2_d_name'] ?? null,
-                        'ad2_name' => $item['ad2_name'] ?? null,
-                        'ad2_regex' => $item['ad2_regex'] ?? null,
-                        'ad3_d_name' => $item['ad3_d_name'] ?? null,
-                        'ad3_name' => $item['ad3_name'] ?? null,
-                        'ad3_regex' => $item['ad3_regex'] ?? null,
-                    ]
-                );
+    if (isset($data['data']) && is_array($data['data'])) {
+        // LpgOperator::truncate(); // Uncomment if you want to wipe old data
+        foreach ($data['data']['data'] as $item) {
+            // dd($data);
+            // dd($data['data']['data']);
+            if (!is_array($item)) {
+                \Log::warning('Skipping invalid LPG item: Not an array', ['item' => $item]);
+                continue;
             }
-        }
 
+            if (!isset($item['id'], $item['name'], $item['category'], $item['viewbill'])) {
+                \Log::warning('Skipping incomplete LPG item: Missing required keys', ['item' => $item]);
+                continue;
+            }
+            LpgOperator::updateOrCreate(
+                ['id' => $item['id']],
+                [
+                    'name' => $item['name'],
+                    'category' => $item['category'],
+                    'viewbill' => $item['viewbill'],
+                    'regex' => $item['regex'] ?? null,
+                    'displayname' => $item['displayname'] ?? null,
+                    'ad1_d_name' => $item['ad1_d_name'] ?? null,
+                    'ad1_name' => $item['ad1_name'] ?? null,
+                    'ad1_regex' => $item['ad1_regex'] ?? null,
+                    'ad2_d_name' => $item['ad2_d_name'] ?? null,
+                    'ad2_name' => $item['ad2_name'] ?? null,
+                    'ad2_regex' => $item['ad2_regex'] ?? null,
+                    'ad3_d_name' => $item['ad3_d_name'] ?? null,
+                    'ad3_name' => $item['ad3_name'] ?? null,
+                    'ad3_regex' => $item['ad3_regex'] ?? null,
+                ]
+            );
+        }
+        // $lpg = LpgOperator::all()->groupBy('category')->keys();
+        // dd($lpg);
+    } else {
+        \Log::error('LPG API response malformed or missing data key', ['response' => $data]);
         return response()->json([
-            'message' => 'LPG Operators data fetched and stored successfully',
-            'data' => LPGOperator::all()
-        ]);
+            'message' => 'Failed to fetch LPG Operators. Malformed data.',
+            'data' => []
+        ], 500);
     }
+
+    return response()->json([
+        'message' => 'LPG Operators data fetched and stored successfully',
+        'data' => LpgOperator::all()
+    ]);
+}
+
     
 
     
@@ -66,14 +85,15 @@ class LPGController
             return Inertia::render('LPG/FetchLPGDetails', ['lpgData' => null]);
         }
 
-        $apiUrl = "https://sit.paysprint.in/service-api/api/v1/service/bill-payment/lpg/fetchbill";
+        $apiUrl = "https://uat.nikatby.in/forwarding/public/api/utility/LPG/FetchLPGDetails";
 
         // API Headers
         $headers = [
-            'Content-Type'  => 'application/json',
-            'Token'         => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'accept'        => 'application/json'
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Content-Type'  => 'application/json',
+            // 'Token'         => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'accept'        => 'application/json'
         ];
 
         // API Request Body (Using User Input)
@@ -134,11 +154,12 @@ class LPGController
     
         // Make API request
         $response = Http::withHeaders([
-            'Content-Type'  => 'application/json',
-            'Accept'        => 'application/json',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Token'         => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/lpg/paybill', [
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Content-Type'  => 'application/json',
+            // 'Accept'        => 'application/json',
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'Token'         => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+        ])->post('https://uat.nikatby.in/forwarding/public/api/utility/LPG/payLpgBill', [
             "canumber"    => $request->canumber,
             "referenceid" => $request->referenceid,
             "amount"      => $request->amount,

@@ -10,16 +10,19 @@ class FastagRechargeController
 {
     public function fastagRechargeOperatorList()
     {
+        dd('dfgdfjg');
         // Call the external API
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/fastag/Fastag/operatorsList');
+            "X-API-KEY"=> "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Content-Type' => 'application/json',
+            // 'accept' => 'application/json',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+        ])->post('https://uat.nikatby.in/forwarding/public/api/utility/FastagRecharge/OperatorList');
 
         // Convert response to JSON
         $apiResponse = $response->json();
+        // dd($apiResponse);
 
         return Inertia::render('FastagRecharge/FastagOperatorList', [
             'operators' => $apiResponse

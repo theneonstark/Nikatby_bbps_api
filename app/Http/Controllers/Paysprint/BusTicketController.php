@@ -24,10 +24,11 @@ class BusTicketController
 {
     try {
         $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkxODE3OTQsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MTgxNzk0In0.xu6dtDjw_kbRZ-WW6SaxbHkedurAhN-IXs8iC-Bsg2s',
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bus/ticket/source');
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'accept' => 'application/json',
+            // 'authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkxODE3OTQsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MTgxNzk0In0.xu6dtDjw_kbRZ-WW6SaxbHkedurAhN-IXs8iC-Bsg2s',
+        ])->post('https://uat.nikatby.in/forwarding/public/api/bus/busTicket/sourceCities');
 
         if (!$response->successful()) {
             throw new \Exception('API request failed: ' . $response->body());
@@ -86,15 +87,16 @@ class BusTicketController
     {
         try {
 
-            $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkxODE3OTQsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MTgxNzk0In0.xu6dtDjw_kbRZ-WW6SaxbHkedurAhN-IXs8iC-Bsg2s';
-            $authKey = 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=';
+            // $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkxODE3OTQsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MTgxNzk0In0.xu6dtDjw_kbRZ-WW6SaxbHkedurAhN-IXs8iC-Bsg2s';
+            // $authKey = 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=';
     
             $response = Http::withHeaders([
-                'accept' => 'application/json',
-                'content-type' => 'application/json',
-                'Token' => $token,
-                'authorisedkey' => $authKey  
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/bus/ticket/availabletrips', $request->all());
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'accept' => 'application/json',
+                // 'content-type' => 'application/json',
+                // 'Token' => $token,
+                // 'authorisedkey' => $authKey  
+            ])->post('https://uat.nikatby.in/forwarding/public/api/bus/busTicket/fetchAndStoreAvailableTrips', $request->all());
     
             $jsonResponse = $response->json();
             
@@ -136,11 +138,12 @@ class BusTicketController
     
             // Make the API call
             $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkzNDM0NDIsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MzQzNDQyIn0.oenxjDuLp4lPTB_fCDZL98ENr6I-ULmw0u9XkGgWZI4'
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/bus/ticket/tripdetails', [
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Accept' => 'application/json',
+                // 'Content-Type' => 'application/json',
+                // 'authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                // 'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkzNDM0NDIsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MzQzNDQyIn0.oenxjDuLp4lPTB_fCDZL98ENr6I-ULmw0u9XkGgWZI4'
+            ])->post('https://uat.nikatby.in/forwarding/public/api/bus/busTicket/fetchTripDetails', [
                 'trip_id' => $request->trip_id
             ]);
     
@@ -252,11 +255,12 @@ class BusTicketController
 
             // API call
             $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkzNDM0NDIsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MzQzNDQyIn0.oenxjDuLp4lPTB_fCDZL98ENr6I-ULmw0u9XkGgWZI4'
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/bus/ticket/bookticket', [
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Accept' => 'application/json',
+                // 'Content-Type' => 'application/json',
+                // 'authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                // 'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkzNDM0NDIsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MzQzNDQyIn0.oenxjDuLp4lPTB_fCDZL98ENr6I-ULmw0u9XkGgWZI4'
+            ])->post('https://uat.nikatby.in/forwarding/public/api/bus/busTicket/bookandstorebookticket', [
                 'refid' => $request->refid,
                 'amount' => $request->amount,
                 'base_fare' => $request->base_fare,
@@ -310,11 +314,12 @@ class BusTicketController
     
             // API call
             $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkzNDM0NDIsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MzQzNDQyIn0.oenxjDuLp4lPTB_fCDZL98ENr6I-ULmw0u9XkGgWZI4'
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/bus/ticket/boardingPoint', [
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Accept' => 'application/json',
+                // 'Content-Type' => 'application/json',
+                // 'authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                // 'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkzNDM0NDIsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MzQzNDQyIn0.oenxjDuLp4lPTB_fCDZL98ENr6I-ULmw0u9XkGgWZI4'
+            ])->post('https://uat.nikatby.in/forwarding/public/api/bus/busTicket/fetchandstoreboardingpointdetails', [
                 'bpId' => $request->bpId, 
                 'trip_id' => $request->trip_id,
             ]);

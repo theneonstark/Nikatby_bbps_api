@@ -20,11 +20,12 @@ class UtilitybillPaymentController
             if ($shouldFetchData) {
                 // Fetch data from API
                 $response = Http::withHeaders([
-                    'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                    'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk5NDQ3MTksInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5OTQ0NzE5In0.1bNrePHYUe-0FodOCdAMpPhL3Ivfpi7eVTT9V7xXsGI',
-                    'accept' => 'application/json',
-                    'content-type' => 'application/json',
-                ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/bill/getoperator', [
+                    "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                    // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                    // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk5NDQ3MTksInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5OTQ0NzE5In0.1bNrePHYUe-0FodOCdAMpPhL3Ivfpi7eVTT9V7xXsGI',
+                    // 'accept' => 'application/json',
+                    // 'content-type' => 'application/json',
+                ])->post('https://uat.nikatby.in/forwarding/public/api/utility/billPayment/operatorList', [
                     'mode' => 'online'
                 ]);
 
@@ -74,32 +75,38 @@ class UtilitybillPaymentController
             }
 
             // Fetch paginated results from database
-            $operators = UtilityOperator::orderBy('name')
-                ->paginate(10)
-                ->through(function ($operator) {
-                    // Transform the data if needed
-                    return [
-                        'id' => $operator->id,
-                        'name' => $operator->name,
-                        'category' => $operator->category,
-                        'viewbill' => $operator->viewbill,
-                        'displayname' => $operator->displayname,
-                        'regex' => $operator->regex,
-                        'ad1_d_name' => $operator->ad1_d_name,
-                        'ad1_name' => $operator->ad1_name,
-                        'ad1_regex' => $operator->ad1_regex,
-                        'ad2_d_name' => $operator->ad2_d_name,
-                        'ad2_name' => $operator->ad2_name,
-                        'ad2_regex' => $operator->ad2_regex,
-                        'ad3_d_name' => $operator->ad3_d_name,
-                        'ad3_name' => $operator->ad3_name,
-                        'ad3_regex' => $operator->ad3_regex,
-                    ];
-                });
+            // $operators = UtilityOperator::all()->groupBy('category');
+            // $categories = UtilityOperator::all()->groupBy('category')->keys();
+            // $operators = UtilityOperator::where('category', $category)->pluck('name');
+            // dd($categories);
+            $categories = UtilityOperator::all()->groupBy('category')->keys();
+            // dd($categories);
+                // ->paginate(10)
+                // ->through(function ($operator) {
+                //     // dd('Bill');
+                //     // Transform the data if needed
+                //     return [
+                //         'id' => $operator->id,
+                //         'name' => $operator->name,
+                //         'category' => $operator->category,
+                //         'viewbill' => $operator->viewbill,
+                //         'displayname' => $operator->displayname,
+                //         'regex' => $operator->regex,
+                //         'ad1_d_name' => $operator->ad1_d_name,
+                //         'ad1_name' => $operator->ad1_name,
+                //         'ad1_regex' => $operator->ad1_regex,
+                //         'ad2_d_name' => $operator->ad2_d_name,
+                //         'ad2_name' => $operator->ad2_name,
+                //         'ad2_regex' => $operator->ad2_regex,
+                //         'ad3_d_name' => $operator->ad3_d_name,
+                //         'ad3_name' => $operator->ad3_name,
+                //         'ad3_regex' => $operator->ad3_regex,
+                //     ];
+                // });
 
-            return Inertia::render('UtilityBillPayment/OperatorList', [
-                'operators' => $operators,
-                'success' => $shouldFetchData ? 'Operators updated successfully' : null
+            return Inertia::render('UtilityBillPayment/Alloperatorlist', [
+                'categories' => $categories,
+                // 'success' => $shouldFetchData ? 'Operators updated successfully' : null
             ]);
 
         } catch (\Exception $e) {
@@ -109,27 +116,38 @@ class UtilitybillPaymentController
             ]);
         }
     }
+    public function categoryDetail($category)
+    {
+    $operators = UtilityOperator::where('category', $category)->pluck('name');
+    // dd($operators);
+
+    return Inertia::render('UtilityBillPayment/Selectoperator', [
+        'category' => $category,
+        'operators' => $operators,
+    ]);
+    }
    public function fetchBillDetails(Request $request)
     {
         // If it's not a POST request, just render the form
         if (!$request->isMethod('post')) {
-            return Inertia::render('UtilityBillPayment/FetchBillDetails');
+            return Inertia::render('UtilityBillPayment/Billresponse');
         }
 
         // Validate the request
         $validated = $request->validate([
-            'operator' => 'required|numeric',
+            'operator' => 'required',
             'canumber' => 'required|numeric',
-            'mode' => 'required|in:online,offline',
+            'mode' => 'required',
         ]);
 
         try {
             $response = Http::withHeaders([
-                'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk5NDQ3MTksInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5OTQ0NzE5In0.1bNrePHYUe-0FodOCdAMpPhL3Ivfpi7eVTT9V7xXsGI',
-                'accept' => 'application/json',
-                'content-type' => 'application/json',
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/bill/fetchbill', [
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk5NDQ3MTksInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5OTQ0NzE5In0.1bNrePHYUe-0FodOCdAMpPhL3Ivfpi7eVTT9V7xXsGI',
+                // 'accept' => 'application/json',
+                // 'content-type' => 'application/json',
+            ])->post('https://uat.nikatby.in/forwarding/public/api/utility/billPayment/fetchBillDetails', [
                 'operator' => $validated['operator'],
                 'canumber' => $validated['canumber'],
                 'mode' => $validated['mode'],
@@ -138,7 +156,7 @@ class UtilitybillPaymentController
             $data = $response->json();
 
             // Store the bill details in the database
-            $billDetail = BillDetail::create([
+            BillDetail::create([
                 'operator' => $validated['operator'],
                 'canumber' => $validated['canumber'],
                 'mode' => $validated['mode'],
@@ -151,10 +169,33 @@ class UtilitybillPaymentController
                 'ad3' => $data['ad3'] ?? null,
                 'message' => $data['message'] ?? null,
             ]);
+            // dd($billDetail);
+            
+            $fetchBill = BillDetail::where('operator', $request->operator)
+            ->where('canumber', $request->canumber)
+            ->where('mode', $request->mode)
+            ->first();
+            // dd($fetchBill);
+            $response = [
+                'status' => 'success',
+                'message' => 'Bill fetched successfully',
+                'data' => [
+                    'amount_due' => $fetchBill->amount,
+                    'due_date' => $fetchBill->duedate,
+                    'customer_name' => $fetchBill->name,
+                    'bill_number' => $fetchBill->id,
+                    'Address' => $fetchBill->id ?? ""
+                ]
+            ];
 
-            return Inertia::render('UtilityBillPayment/FetchBillDetails', [
-                'billData' => $data,
-                'savedRecord' => $billDetail
+            return Inertia::render('UtilityBillPayment/Billresponse', [
+                'operator' => $request->operator,
+                'canumber' => $request->canumber,
+                'mode' => $request->mode,
+                'status' => 'success',
+                'response' => $response ,
+                // 'billData' => $data,
+                // 'savedRecord' => $billDetail
             ]);
 
         } catch (\Exception $e) {
@@ -178,7 +219,7 @@ class UtilitybillPaymentController
         ]);
 
         try {
-            $apiUrl = config('services.paysprint.url', 'https://sit.paysprint.in/service-api/api/v1/service/bill-payment/bill/paybill');
+            $apiUrl = config('services.paysprint.url', 'https://uat.nikatby.in/forwarding/public/api/utility/billPayment/processBillPayment');
             
             // Generate a unique reference ID
             $referenceId = 'REF' . time() . rand(1000, 9999);
@@ -210,10 +251,11 @@ class UtilitybillPaymentController
             ]);
 
             $response = Http::withHeaders([
-                'Authorisedkey' => config('services.paysprint.auth_key', 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I='),
-                'Token' => config('services.paysprint.token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M'),
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Authorisedkey' => config('services.paysprint.auth_key', 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I='),
+                // 'Token' => config('services.paysprint.token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M'),
+                // 'Accept' => 'application/json',
+                // 'Content-Type' => 'application/json',
             ])->post($apiUrl, $payload);
 
             // Log the API response for debugging
@@ -288,11 +330,12 @@ public function fetchUtilityStatus(Request $request)
             Log::info('Fetching utility status for reference ID: ' . $validated['referenceid']);
 
             $response = Http::withHeaders([
-                'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-                'accept' => 'application/json',
-                'content-type' => 'application/json'
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/bill/status', [
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+                // 'accept' => 'application/json',
+                // 'content-type' => 'application/json'
+            ])->post('https://uat.nikatby.in/forwarding/public/api/utility/billPayment/fetchUtilityStatus', [
                 'referenceid' => $validated['referenceid']
             ]);
 

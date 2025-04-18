@@ -48,9 +48,8 @@ class AuthanticationController
         if (Auth::attempt($request->only('email', 'password'))) {
             // dd('Good');
             $request->session()->regenerate();
-            if(Auth::user()->role === 2){               
+            if(Auth::user()->role === 1){               
                 return Inertia::location('/adminDashboard');
-
             }
             return Inertia::location('/dashboard');
             // return view('test');

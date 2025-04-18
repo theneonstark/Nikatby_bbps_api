@@ -21,6 +21,7 @@ export default function BankDashboard() {
   const fetchBankData = async () => {
     try {
       const data = await getAllBankDetails();
+      return data;
       if (Array.isArray(data)) {
         setBanks(data);
       } else {

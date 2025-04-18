@@ -10,9 +10,11 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import Navbar from "@/Layouts/newLayout/navbar";
+import { usePage, router } from '@inertiajs/react'
 
 // Permissions Component
 export default function Permissions() {
+  
   const [permission, setPermissions] = useState([]);
   const [permissionDialog, setPermissionDialog] = useState(false);
   const [editPermission, setEditPermission] = useState(null);
@@ -28,6 +30,7 @@ export default function Permissions() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    
     async function fetchPermissions() {
       setLoading(true);
       try {

@@ -24,11 +24,12 @@ class InsurancePremiumPaymentController
 
     try {
         $response = Http::withHeaders([
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'accept' => 'application/json',
-            'content-type' => 'application/json'
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/bill/fetchlicbill', [
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'accept' => 'application/json',
+            // 'content-type' => 'application/json'
+        ])->post('https://uat.nikatby.in/forwarding/public/api/utility/InsurancePremiumPayment/fetchLICBill', [
             'canumber' => $request->canumber,
             'ad1' => $request->ad1,
             'ad2' => $request->ad2,
@@ -78,11 +79,12 @@ class InsurancePremiumPaymentController
         }
 
         $response = Http::withHeaders([
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-            'accept' => 'application/json',
-            'content-type' => 'application/json',
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/bill/paylicbill', [
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+            // 'accept' => 'application/json',
+            // 'content-type' => 'application/json',
+        ])->post('https://uat.nikatby.in/forwarding/public/api/utility/InsurancePremiumPayment/payInsuranceBill', [
             'canumber' => $request->canumber,
             'mode' => 'online',
             'amount' => $request->amount,
@@ -125,11 +127,12 @@ class InsurancePremiumPaymentController
 
         // API request
         $response = Http::withHeaders([
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/bill/licstatus', [
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+            // 'Accept' => 'application/json',
+            // 'Content-Type' => 'application/json',
+        ])->post('https://uat.nikatby.in/forwarding/public/api/utility/InsurancePremiumPayment/fetchInsuranceStatus', [
             'referenceid' => $referenceId,
         ]);
 

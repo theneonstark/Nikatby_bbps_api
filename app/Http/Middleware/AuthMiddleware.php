@@ -15,13 +15,9 @@ class AuthMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Define the routes that do not require authentication
-        $allowedRoutes = [
-            'loginPage',           // login page
-            'registration',        // registration page
-        ];
 
         // Check if the user is authenticated or the current route is in the allowed list
-        if (Auth::check() || in_array($request->route()->getName(), $allowedRoutes)) {
+        if (Auth::user()->role === 1) {
             return $next($request);
         }
 

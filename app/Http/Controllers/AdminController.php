@@ -263,7 +263,7 @@ class AdminController extends Controller
             return response()->json([
                 'success' => true,
                 'balance' => $response->json('cdwallet') ?? 0,
-                'message' => 'Wallet balance retrieved successfully'
+                'message' => 'Wallet balance retrieved successfully1'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -275,7 +275,7 @@ class AdminController extends Controller
     }
     
     public function getCreditBalance()
-    {
+    { dd('getCreditBalance');
         $requestId = time() . rand(1000, 9999);
         $jwtToken = $this->generateJwtToken($requestId);
        
@@ -291,7 +291,7 @@ class AdminController extends Controller
             return response()->json([
                 'success' => true,
                 'balance' => $response->json('data.balance') ?? 0,
-                'message' => 'Credit balance retrieved successfully'
+                'message' => 'Credit balance retrieved successfully2'
             ]);
         } catch (\Exception $e) {
             return response()->json([

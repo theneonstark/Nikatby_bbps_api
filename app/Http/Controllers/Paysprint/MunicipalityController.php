@@ -57,10 +57,11 @@ class MunicipalityController
         $mode = $request->input('mode'); // Get mode from user input
 
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I='
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/municipality/getoperator', [
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Content-Type' => 'application/json',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I='
+        ])->post('https://uat.nikatby.in/forwarding/public/api/utility/Municipality/fetchMunicipalityOperator', [
             'mode' => $mode
         ]);
 
@@ -76,11 +77,12 @@ class MunicipalityController
     {
         try {
             $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-                'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-                'accept' => 'application/json'
-            ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/municipality/fetchbill', [
+                "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+                // 'Content-Type' => 'application/json',
+                // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+                // 'accept' => 'application/json'
+            ])->post('https://uat.nikatby.in/forwarding/public/api/utility/Municipality/fetchBillDetails', [
                 'canumber' => $request->canumber,
                 'operator' => $request->operator
             ]);
@@ -135,11 +137,12 @@ class MunicipalityController
     
         // Make API request
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-            'accept' => 'application/json',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I='
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/municipality/paybill', $validatedData);
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Content-Type' => 'application/json',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+            // 'accept' => 'application/json',
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I='
+        ])->post('https://uat.nikatby.in/forwarding/public/api/utility/Municipality/PayMunicipalityBill', $validatedData);
     
         $responseData = $response->json();
     
@@ -184,11 +187,12 @@ class MunicipalityController
 
         // API request
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
-            'accept' => 'application/json',
-            'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I='
-        ])->post('https://sit.paysprint.in/service-api/api/v1/service/bill-payment/municipality/status', [
+            "X-API-KEY" => "DyCiDJMcvTZgJLBcYohezUEPJNPXYzR5jNyrxQRi",
+            // 'Content-Type' => 'application/json',
+            // 'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+            // 'accept' => 'application/json',
+            // 'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I='
+        ])->post('https://uat.nikatby.in/forwarding/public/api/utility/Municipality/MunicipalityEnquiryStatus', [
             'referenceid' => $referenceId,
         ]);
         $responseData = $response->json();

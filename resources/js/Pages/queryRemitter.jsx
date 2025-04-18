@@ -25,7 +25,8 @@ export default function SearchRemitter() {
 
         try {
             const response = await axios.post('/search-remitter', { mobile });
-            // console.log(response.data);
+            console.log(response.data);
+            // return response.data;
             if (response.data.remitter) {
                 setRemitter(response.data.remitter);
                 setError('');
