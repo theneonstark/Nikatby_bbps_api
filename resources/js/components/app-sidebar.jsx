@@ -182,7 +182,11 @@ export function AppSidebar({ ...props }) {
     {
       title: "Member Details",
       icon: UsersIcon ,
-      url: "admin/members",
+<<<<<<< HEAD
+      url: "/admin/members",
+=======
+      url: `${BASE_URL}/admin/members`,
+>>>>>>> 0f1e84538ae261690aa45f5ef2b21b31b209bb53
     },
     {
       title: "Bank Details",
@@ -209,12 +213,22 @@ export function AppSidebar({ ...props }) {
         },
         {
           title: "Bill Payment",
+<<<<<<< HEAD
+          url: "/admin/utility-bill-payment/operator-list",
+          // subItems: [
+          //   { title: "Operator List", url: "/admin/utility-bill-payment/operator-list" },
+          //   { title: "Fetch Bill Details", url: "/admin/utility-bill-payment/fetch-bill-details" },
+          //   { title: "Pay Bill", url: "/admin/utility-bill-payment/pay-bill" },
+          //   { title: "Status Enquiry", url: "/admin/utility-bill-payment/utility-status-enquiry" },
+          // ],
+=======
           subItems: [
-            { title: "Operator List", url: "/admin/utility-bill-payment/operator-list" },
-            { title: "Fetch Bill Details", url: "/admin/utility-bill-payment/fetch-bill-details" },
-            { title: "Pay Bill", url: "/admin/utility-bill-payment/pay-bill" },
-            { title: "Status Enquiry", url: "/admin/utility-bill-payment/utility-status-enquiry" },
+            { title: "Operator List", url: `${BASE_URL}/admin/utility-bill-payment/operator-list` },
+            { title: "Fetch Bill Details", url: `${BASE_URL}/admin/utility-bill-payment/fetch-bill-details` },
+            { title: "Pay Bill", url: `${BASE_URL}/admin/utility-bill-payment/pay-bill` },
+            { title: "Status Enquiry", url: `${BASE_URL}/admin/utility-bill-payment/utility-status-enquiry` },
           ],
+>>>>>>> 0f1e84538ae261690aa45f5ef2b21b31b209bb53
         },
         {
           title: "Insurance Payment",

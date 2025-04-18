@@ -20,17 +20,17 @@ const Complaints = () => {
           >
             <h2 className="text-2xl font-semibold mb-6 text-blue-700">Complaint Management</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <motion.a href="/userpanel3/public/complaintFrom" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.a href="/complaintFrom" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <div className="bg-white shadow-md rounded-lg p-6 text-center border cursor-pointer hover:shadow-lg transition duration-300">
                   <span className="text-teal-600 font-semibold">Complaint Registration</span>
                 </div>
               </motion.a>
-              <a href="/userpanel3/public/queryTransaction">
+              <a href="/queryTransaction">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="bg-white shadow-md rounded-lg p-6 text-center border cursor-pointer hover:shadow-lg transition duration-300">
                 <span className="text-teal-600 font-semibold">Complaint Tracking</span>
               </motion.div>
               </a>
-              <a href="/userpanel3/public/trackComplaintStatus">
+              <a href="/trackComplaintStatus">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="bg-white shadow-md rounded-lg p-6 text-center border cursor-pointer hover:shadow-lg transition duration-300">
                 <span className="text-teal-600 font-semibold">Search Transaction</span>
               </motion.div>
