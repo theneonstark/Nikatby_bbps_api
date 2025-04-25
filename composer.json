@@ -34,7 +34,11 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-        "app/Helpers/CommonHelper.php"
+        "app/Helpers/CommonHelper.php",
+        "app/Helpers/CryptoJsAes.php",
+        "app/Helpers/Permission.php",
+        "app/Helpers/helpers.php"
+
     ]
     },
     

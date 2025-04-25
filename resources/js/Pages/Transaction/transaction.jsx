@@ -6,8 +6,12 @@ import { Button } from '@/components/ui/button';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const Transaction = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
     const [formData, setFormData] = useState({
         mobile: '',
         referenceid: '',
@@ -33,7 +37,13 @@ const Transaction = () => {
         e.preventDefault();
         try {
             const res = await axios.post('/DMT/TranSactionStore', formData);
+            if(user.verified !== 1)
+            {
+               router.visit('/getonboarding')
+            }
+            if(response.data && user.verified ===  1){
             setResponse(res.data);
+            }
         } catch (err) {
             setResponse(err.response.data);
         }

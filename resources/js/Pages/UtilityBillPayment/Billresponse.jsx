@@ -85,7 +85,8 @@ const BillResponse = () => {
               </div>
             ) : (
               <div className="mt-4 p-6 bg-red-50 border border-red-200 rounded">
-                <p className="text-red-700 text-base font-medium">No bill details found.</p>
+                <p className="text-red-700 text-base font-medium">No bill details found. <a className='text-green-700' href='/admin/utility-bill-payment/operator-list'> Click Here & Try Again.</a> </p>
+                
               </div>
             )}
           </div>

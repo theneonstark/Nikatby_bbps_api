@@ -4,9 +4,13 @@ import { MapPin, Phone, Landmark, Hash, Map, User, Building } from 'lucide-react
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 
 const BoardingPoint = () => {
+  const { props: inertiaProps } = usePage();
+  const user = inertiaProps.auth?.user;
   const [bpId, setBpId] = useState('');
   const [tripId, setTripId] = useState('');
   const [boardingPoint, setBoardingPoint] = useState(null);
@@ -21,6 +25,11 @@ const BoardingPoint = () => {
     setResponseInfo(null);
 
     try {
+      if(user.verified !== 1)
+      {
+       router.visit('/getonboarding')
+       return;
+      }
       const response = await axios.post('/Busticket/fetchandstoreboardingpointdetails', {
         bpId: parseInt(bpId, 10),
         trip_id: parseInt(tripId, 10),

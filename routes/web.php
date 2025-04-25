@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\BBPS\BbpsController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\Controllers\Auth\AuthanticationController;
 use App\Http\Controllers\Controllers\Controllers\Auth\AuthanticationController as AuthAuthanticationController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Paysprint\BusTicketController;
 use App\Http\Controllers\Paysprint\DashboardController;
 use App\Http\Controllers\Paysprint\DMT2Controller;
 use App\Http\Controllers\Paysprint\FastagRechargeController;
+use App\Http\Controllers\Paysprint\FormProgressController;
 use App\Http\Controllers\Paysprint\InsurancePremiumPaymentController;
 use App\Http\Controllers\Paysprint\LPGController;
 use App\Http\Controllers\Paysprint\MunicipalityController;
@@ -20,14 +22,25 @@ use App\Http\Controllers\Paysprint\Remitter2Controller;
 use App\Http\Controllers\Paysprint\UtilitybillPaymentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
-
+Route::get('/onboardingUser', [FormProgressController::class, 'index']);
+Route::post('/onboarding/save-step', [FormProgressController::class, 'saveStep']);
+Route::post('/submit-onboarding-form', [FormProgressController::class, 'submit']);
+// ['auth', 'onBoard']
 Route::middleware('auth')->group(function () {
+
+    //Onboarding Process user start
+    // Route::get('/onboardingUser', [FormProgressController::class, 'index']);
+    // Route::post('/onboarding/save-step', [FormProgressController::class, 'saveStep']);
+    // Route::post('/submit-onboarding-form', [FormProgressController::class, 'submit']);
+    //Onboarding Process user end
+
     Route::get('/dashboard', function () {
         return Inertia::render('dashboard',[
             'user' => isset(auth()->user()->name) ? auth()->user()->name: ' '
         ]);
-    });
+    })->name('dashboard');
     Route::get('/services', function () {
         return Inertia::render('Services');
     });
@@ -457,3 +470,34 @@ Route::get('/logincheck', [DMT2Controller::class, 'loginCheck']);
 Route::get('/unauthorized', function () {
     return Inertia::render('Unauthorized');
 })->name('unauthorized');
+Route::get('/onboarding', function () {
+    return Inertia::render('Verifyitsyou');
+})->name('onboarding');
+
+Route::get('/getonboarding', function () {
+    return Inertia::render('OnboardingPage');
+})->name('getonboarding');
+
+// Route::get('/fetchbillbbps', [BbpsController::class, 'fetchBill']);
+Route::prefix('bill')->group(function () {
+    Route::get('/billerInfo', [BbpsController::class, 'billerInfo']);
+    Route::post('{type}/{biller}', [BbpsController::class, 'billerId']);
+    Route::post('/fetchbill', [BbpsController::class, 'fetchBill']);
+    Route::get('/test', function () {
+        return Inertia::render('Billfetch');
+    })->name('getonboarding');
+    Route::get('/paybill', [BbpsController::class, 'paybill']);
+    Route::post('/billPayment', [BbpsController::class, 'billPayment']);
+    Route::get('/transactionStatus', [BbpsController::class, 'transactionStatus']);
+    Route::get('/complaintRegistration', [BbpsController::class, 'complaintRegistration']);
+    Route::post('/previousRegisteredComplaint', [BbpsController::class, 'previousRegisteredComplaint']);
+    Route::post('/billValidation', [BbpsController::class, 'billValidation']);
+});
+
+
+//Testing only
+
+Route::get('/api/categories', [BbpsController::class, 'getCategories']);
+Route::get('/api/operators/{category}', [BbpsController::class, 'getOperators']);
+Route::post('/api/fetch-bill', [BbpsController::class, 'fetchBills']);
+Route::post('/fetch-bill', [BbpsController::class, 'fetch']);

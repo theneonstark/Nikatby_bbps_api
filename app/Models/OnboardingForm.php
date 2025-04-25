@@ -20,6 +20,7 @@ class OnboardingForm extends Model
         'aadhaarFront',
         'aadhaarBack',
         'panCard',
+        'verified,'
     ];
 }
   

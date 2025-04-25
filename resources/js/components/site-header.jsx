@@ -21,7 +21,7 @@ export function SiteHeader() {
                 {user && (
                     <div className="flex items-center gap-2">
                         <span className="text-gray-800 font-bold">{user}</span>
-                        <span className="text-red-800 font-semibold"><a href='/userpanel3/public/logout'>Logout</a></span>
+                        <span className="text-red-800 font-semibold"><a href='/logout'>Logout</a></span>
                     </div>
                 )}
             </div>

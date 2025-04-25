@@ -4,8 +4,12 @@ import axios from "axios";
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const DoRechargeForm = () => {
+  const { props: inertiaProps } = usePage();
+  const user = inertiaProps.auth?.user;
   const [formData, setFormData] = useState({
     operator: "",
     canumber: "",
@@ -35,6 +39,11 @@ const DoRechargeForm = () => {
     setApiResponse(null);
 
     try {
+      if(user.verified !== 1)
+      {
+        router.visit('/getonboarding')
+        return;
+      }
       // Call PaySprint API directly
       const apiResponse = await axios.post(
         'https://sit.paysprint.in/service-api/api/v1/service/recharge/recharge/dorecharge',

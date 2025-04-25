@@ -5,16 +5,26 @@ import { Button } from '@/components/ui/button';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const TransactionStatus = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
     const [referenceid, setReferenceId] = useState('');
     const [response, setResponse] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if(user.verified !== 1)
+            {
+              router.visit('/getonboarding')
+            }
+            else{
             const res = await axios.post('/DMT/transactionstatusstore', { referenceid });
             setResponse(res.data);
+            }
         } catch (err) {
             setResponse(err.response.data);
         }

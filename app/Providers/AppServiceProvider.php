@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\OnBoarding;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         app('router')->aliasMiddleware('isAdmin', IsAdmin::class);
+        app('router')->aliasMiddleware('onBoard', OnBoarding::class);
         Inertia::share([
             'user' => function () {
                 return Auth::check() ? Auth::user()->name : null;
@@ -39,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
                 return [
                     'user' => Auth::user(),
                     'isAdmin' => Auth::check() && Auth::user()->role === 1,
+                    'onBoard' => Auth::check() && Auth::user()->verified === 1,
                 ];
             },
         ]);

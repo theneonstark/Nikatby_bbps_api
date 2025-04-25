@@ -4,8 +4,12 @@ import { Loader2 } from 'lucide-react';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const GetCurrentTripDetails = () => {
+  const { props: inertiaProps } = usePage();
+  const user = inertiaProps.auth?.user;
   const [tripId, setTripId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -67,6 +71,11 @@ const GetCurrentTripDetails = () => {
 
   const saveTripDetails = async (transformedData) => {
     try {
+      if(user.verified !== 1)
+        {
+          router.visit('/getonboarding')
+          return;
+        }
       const boardingPointsData = transformedData.boardingPoints.map(point => ({
         location: point.name,
         address: point.address,
@@ -88,7 +97,7 @@ const GetCurrentTripDetails = () => {
           boarding_points: boardingPointsData
         })
       });
-
+      
       const result = await response.json();
       
       if (!result.status) {
@@ -114,6 +123,7 @@ const GetCurrentTripDetails = () => {
 
     try {
       // Updated endpoint to match the new route
+      
       const response = await fetch('/Busticket/fetchTripDetails', {
         method: 'POST',
         headers: {

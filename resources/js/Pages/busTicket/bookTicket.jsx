@@ -4,9 +4,13 @@ import axios from "axios";
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 
 const BookTicket = () => {
+  const { props: inertiaProps } = usePage();
+  const user = inertiaProps.auth?.user;
   const [formData, setFormData] = useState({
     refid: 3,
     amount: 6,
@@ -40,6 +44,11 @@ const BookTicket = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if(user.verified !== 1)
+      {
+        router.visit('/getonboarding')
+        return;
+      }
       const res = await axios.post("/Busticket/bookandstorebookticket", formData, {
         headers: {
           "Content-Type": "application/json",

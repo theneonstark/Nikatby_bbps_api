@@ -71,202 +71,190 @@ export function AppSidebar({ ...props }) {
   };
 
   const navItems = [
-    {
-      title: "Dashboard",
-      icon: LayoutDashboardIcon,
-      url: userrole === 1 ? `${BASE_URL}/adminDashboard` : `${BASE_URL}/dashboard`,
-    },
+    // {
+    //   title: "Dashboard",
+    //   icon: LayoutDashboardIcon,
+    //   url: userrole === 1 ? `${BASE_URL}/adminDashboard` : `${BASE_URL}/dashboard`,
+    // },
     {
       title: "Services",
       icon: ListIcon,
       url: `${BASE_URL}/services`,
       // subItems: [{ title: "All Services", url: "/services" }],
     },
-    {
-      title: "Complaint",
-      icon: AlertTriangleIcon,
-      url: `${BASE_URL}/complaint`,
-      // subItems: [{ title: "Complaint Registarion & Track", url: "/complaint" }],
-    },
-    {
-      title: "DMT 2",
-      icon: IndianRupeeIcon,
-      subItems: [
-        {
-          title: "Dashboard",
-          url: `${BASE_URL}/dmt2/dashboard`,
-        },
-        {
-          title: "Remitter",
-          subItems: [
-            { title: "Query Remitter", url: `${BASE_URL}/DMT/queryRemitter` },
-            { title: "Remitter Aadhar verify API", url: `${BASE_URL}/DMT/remitterAadharVerify` },
-            { title: "Register Remitter", url: `${BASE_URL}/DMT/registerRemitter` },
-          ],
-        },
-        {
-          title: "Beneficiary",
-          subItems: [
-            { title: "Register Beneficiary", url: `${BASE_URL}/DMT/registerBeneficiary` },
-            { title: "Delete Beneficiary", url: `${BASE_URL}/DMT/deleteBeneficiary` },
-            { title: "Fetch Beneficiary", url: `${BASE_URL}/DMT/fetchBeneficiary` },
-            { title: "Fetch Beneficiary By Beneid", url: `${BASE_URL}/DMT/searchByBeneId` },
-          ],
-        },
-        {
-          title: "Transaction",
-          subItems: [
-            { title: "Penny Drop", url: `${BASE_URL}/DMT/pennyDropForm` },
-            { title: "Transaction Sent Otp", url: `${BASE_URL}/DMT/transactionSendOtpForm` },
-            { title: "Transaction", url: `${BASE_URL}/DMT/TranSaction` },
-            { title: "Transaction Status", url: `${BASE_URL}/DMT/transactionStatus` },
-          ],
-        },
-        {
-          title: "Refund",
-          subItems: [
-            { title: "Refund Otp", url: `${BASE_URL}/DMT/refund` },
-            { title: "Claim Refund", url: `${BASE_URL}/DMT/claimRefund` },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Bus Booking",
-      icon: BusFrontIcon,
-      subItems: [
-        { title: "Dashboard", url: `${BASE_URL}/bus-booking/dashboard` },
-        { title: "Get Source City", url: `${BASE_URL}/Busticket/getSourceCity` },
-        { title: "Get Available Trip", url: `${BASE_URL}/Busticket/getAvailableTrip` },
-        { title: "Get Current Trip Details", url: `${BASE_URL}/Busticket/getCurrentTripDetails` },
-        { title: "Book Tickets", url: `${BASE_URL}/Busticket/getbookTicket` },
-        { title: "Get Boarding Point Details", url: `${BASE_URL}/Busticket/getboardingpointdetails` },
-        { title: "Check Booked Tickets", url: `${BASE_URL}/Busticket/checkBookedTicket` },
-      ],
-    },
-    {
-      title: "Recharge",
-      url : userrole === 1 ? `${BASE_URL}/admin/rechargeDashboard` : undefined,
-      icon: ZapIcon,
-      subItems:  userrole != 1 ? [
-        { title: "Dashboard", url: `${BASE_URL}/recharge/dashboard` },
-        { title: "Do Recharge", url: `${BASE_URL}/Recharge/dorecharge` },
-        { title: "Status Enquiry", url: `${BASE_URL}/Recharge/recharge2` },
-        { title: "Manage Operator", url: `${BASE_URL}/Recharge/manageOperator` },
-      ]: undefined,
-    },
-    {
-      title: "LIC",
-      url :`${BASE_URL}/admin/lic`,
-      icon: BriefcaseIcon,
-    },
-    {
-      title: "Roles & Permission",
-      icon: SettingsIcon ,
-      subItems: [
-        {
-          title: "Roles",
-          url: `${BASE_URL}/admin/displayroles`,
-        },
-        {
-          title: "Permissions",
-          url: `${BASE_URL}/admin/displaypermissions`,
-        },
-      ]
-    },
-    {
-      title: "Commission",
-      icon: PercentIcon ,
-      url: `${BASE_URL}/admin/commission`,
-    },
-    {
-      title: "Member Details",
-      icon: UsersIcon ,
-<<<<<<< HEAD
-      url: "/admin/members",
-=======
-      url: `${BASE_URL}/admin/members`,
->>>>>>> 0f1e84538ae261690aa45f5ef2b21b31b209bb53
-    },
-    {
-      title: "Bank Details",
-      icon: LandmarkIcon ,
-      url: `${BASE_URL}/admin/bank`,
-    },
-    {
-      title: "Fund Request",
-      icon: BanknoteIcon ,
-      url: `${BASE_URL}/admin/fund/request`,
-    },
-    {
-      title: "IP Whitelisting",
-      icon: ShieldCheckIcon ,
-      url: `${BASE_URL}/admin/ip-whitelisting`,
-    },
-    {
-      title: "Utilities",
-      icon: SettingsIcon,
-      subItems: [
-        {
-          title: "Dashboard",
-          url: `${BASE_URL}/utilities/dashboard`,
-        },
-        {
-          title: "Bill Payment",
-<<<<<<< HEAD
-          url: "/admin/utility-bill-payment/operator-list",
-          // subItems: [
-          //   { title: "Operator List", url: "/admin/utility-bill-payment/operator-list" },
-          //   { title: "Fetch Bill Details", url: "/admin/utility-bill-payment/fetch-bill-details" },
-          //   { title: "Pay Bill", url: "/admin/utility-bill-payment/pay-bill" },
-          //   { title: "Status Enquiry", url: "/admin/utility-bill-payment/utility-status-enquiry" },
-          // ],
-=======
-          subItems: [
-            { title: "Operator List", url: `${BASE_URL}/admin/utility-bill-payment/operator-list` },
-            { title: "Fetch Bill Details", url: `${BASE_URL}/admin/utility-bill-payment/fetch-bill-details` },
-            { title: "Pay Bill", url: `${BASE_URL}/admin/utility-bill-payment/pay-bill` },
-            { title: "Status Enquiry", url: `${BASE_URL}/admin/utility-bill-payment/utility-status-enquiry` },
-          ],
->>>>>>> 0f1e84538ae261690aa45f5ef2b21b31b209bb53
-        },
-        {
-          title: "Insurance Payment",
-          subItems: [
-            { title: "Fetch Insurance Bill Details", url: `${BASE_URL}/admin/InsurancePremiumPayment/FetchInsuranceBillDetails` },
-            { title: "Pay Insurance Bill", url: `${BASE_URL}/pay-insurance-bill` },
-            { title: "Insurance Status Enquiry", url: `${BASE_URL}/admin/InsurancePremiumPayment/InsuranceStatusEnquiry` },
-          ],
-        },
-        {
-          title: "Fastag Recharge",
-          subItems: [
-            { title: "Operator List", url: `${BASE_URL}/admin/FastagRecharge/FastagOperatorList` },
-            { title: "Fetch Consumer Details", url: `${BASE_URL}/admin/FastagRecharge/fetchConsumerDetails` },
-            { title: "Recharge", url: `${BASE_URL}/admin/FastagRecharge/fastagRecharge` },
-            { title: "Status", url: `${BASE_URL}/admin/FastagRecharge/FastagStatus` },
-          ],
-        },
-        {
-          title: "LPG Booking & Payment",
-          subItems: [
-            { title: "Operator List", url: `${BASE_URL}/admin/LPG/LPGOperator` },
-            { title: "Fetch LPG Details", url: `${BASE_URL}/admin/LPG/FetchLPGDetails` },
-            { title: "Pay Bill", url: `${BASE_URL}/admin/LPG/LPGBill` },
-            { title: "Status", url: `${BASE_URL}/admin/LPG/LPGStatus` },
-          ],
-        },
-        {
-          title: "Municipality Payment",
-          subItems: [
-            { title: "Operator List", url: `/admin/Municipality/MunicipalityOperator` },
-            { title: "Fetch Municipality Details", url: `${BASE_URL}/admin/Municipality/FetchMunicipalityDetails` },
-            { title: "Pay Bill", url: `${BASE_URL}/admin/Municipality/MunicipalityBill` },
-            { title: "Status", url: `${BASE_URL}/admin/Municipality/MunicipalityStatus` },
-          ],
-        },
-      ],
-    },
+    // {
+    //   title: "Complaint",
+    //   icon: AlertTriangleIcon,
+    //   url: `${BASE_URL}/complaint`,
+    //   // subItems: [{ title: "Complaint Registarion & Track", url: "/complaint" }],
+    // },
+    // {
+    //   title: "DMT 2",
+    //   icon: IndianRupeeIcon,
+    //   subItems: [
+    //     {
+    //       title: "Dashboard",
+    //       url: `${BASE_URL}/dmt2/dashboard`,
+    //     },
+    //     {
+    //       title: "Remitter",
+    //       subItems: [
+    //         { title: "Query Remitter", url: `${BASE_URL}/DMT/queryRemitter` },
+    //         { title: "Remitter Aadhar verify API", url: `${BASE_URL}/DMT/remitterAadharVerify` },
+    //         { title: "Register Remitter", url: `${BASE_URL}/DMT/registerRemitter` },
+    //       ],
+    //     },
+    //     {
+    //       title: "Beneficiary",
+    //       subItems: [
+    //         { title: "Register Beneficiary", url: `${BASE_URL}/DMT/registerBeneficiary` },
+    //         { title: "Delete Beneficiary", url: `${BASE_URL}/DMT/deleteBeneficiary` },
+    //         { title: "Fetch Beneficiary", url: `${BASE_URL}/DMT/fetchBeneficiary` },
+    //         { title: "Fetch Beneficiary By Beneid", url: `${BASE_URL}/DMT/searchByBeneId` },
+    //       ],
+    //     },
+    //     {
+    //       title: "Transaction",
+    //       subItems: [
+    //         { title: "Penny Drop", url: `${BASE_URL}/DMT/pennyDropForm` },
+    //         { title: "Transaction Sent Otp", url: `${BASE_URL}/DMT/transactionSendOtpForm` },
+    //         { title: "Transaction", url: `${BASE_URL}/DMT/TranSaction` },
+    //         { title: "Transaction Status", url: `${BASE_URL}/DMT/transactionStatus` },
+    //       ],
+    //     },
+    //     {
+    //       title: "Refund",
+    //       subItems: [
+    //         { title: "Refund Otp", url: `${BASE_URL}/DMT/refund` },
+    //         { title: "Claim Refund", url: `${BASE_URL}/DMT/claimRefund` },
+    //       ],
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Bus Booking",
+    //   icon: BusFrontIcon,
+    //   subItems: [
+    //     { title: "Dashboard", url: `${BASE_URL}/bus-booking/dashboard` },
+    //     { title: "Get Source City", url: `${BASE_URL}/Busticket/getSourceCity` },
+    //     { title: "Get Available Trip", url: `${BASE_URL}/Busticket/getAvailableTrip` },
+    //     { title: "Get Current Trip Details", url: `${BASE_URL}/Busticket/getCurrentTripDetails` },
+    //     { title: "Book Tickets", url: `${BASE_URL}/Busticket/getbookTicket` },
+    //     { title: "Get Boarding Point Details", url: `${BASE_URL}/Busticket/getboardingpointdetails` },
+    //     { title: "Check Booked Tickets", url: `${BASE_URL}/Busticket/checkBookedTicket` },
+    //   ],
+    // },
+    // {
+    //   title: "Recharge",
+    //   url : userrole === 1 ? `${BASE_URL}/admin/rechargeDashboard` : undefined,
+    //   icon: ZapIcon,
+    //   subItems:  userrole != 1 ? [
+    //     { title: "Dashboard", url: `${BASE_URL}/recharge/dashboard` },
+    //     { title: "Do Recharge", url: `${BASE_URL}/Recharge/dorecharge` },
+    //     { title: "Status Enquiry", url: `${BASE_URL}/Recharge/recharge2` },
+    //     { title: "Manage Operator", url: `${BASE_URL}/Recharge/manageOperator` },
+    //   ]: undefined,
+    // },
+    // {
+    //   title: "LIC",
+    //   url :`${BASE_URL}/admin/lic`,
+    //   icon: BriefcaseIcon,
+    // },
+    // {
+    //   title: "Roles & Permission",
+    //   icon: SettingsIcon ,
+    //   subItems: [
+    //     {
+    //       title: "Roles",
+    //       url: `${BASE_URL}/admin/displayroles`,
+    //     },
+    //     {
+    //       title: "Permissions",
+    //       url: `${BASE_URL}/admin/displaypermissions`,
+    //     },
+    //   ]
+    // },
+    // {
+    //   title: "Commission",
+    //   icon: PercentIcon ,
+    //   url: `${BASE_URL}/admin/commission`,
+    // },
+    // {
+    //   title: "Member Details",
+    //   icon: UsersIcon ,
+    //    url: `${BASE_URL}/admin/members`,
+    //   url: `${BASE_URL}/admin/members`,
+    // },
+    // {
+    //   title: "Bank Details",
+    //   icon: LandmarkIcon ,
+    //   url: `${BASE_URL}/admin/bank`,
+    // },
+    // {
+    //   title: "Fund Request",
+    //   icon: BanknoteIcon ,
+    //   url: `${BASE_URL}/admin/fund/request`,
+    // },
+    // {
+    //   title: "IP Whitelisting",
+    //   icon: ShieldCheckIcon ,
+    //   url: `${BASE_URL}/admin/ip-whitelisting`,
+    // },
+    // {
+    //   title: "Utilities",
+    //   icon: SettingsIcon,
+    //   subItems: [
+    //     {
+    //       title: "Dashboard",
+    //       url: `${BASE_URL}/utilities/dashboard`,
+    //     },
+    //     {
+    //       title: "Bill Payment",
+    //       url: "/admin/utility-bill-payment/operator-list",
+    //       // subItems: [
+    //       //   { title: "Operator List", url: `${BASE_URL}/admin/utility-bill-payment/operator-list` },
+    //       //   { title: "Fetch Bill Details", url: `${BASE_URL}/admin/utility-bill-payment/fetch-bill-details` },
+    //       //   { title: "Pay Bill", url: `${BASE_URL}/admin/utility-bill-payment/pay-bill` },
+    //       //   { title: "Status Enquiry", url: `${BASE_URL}/admin/utility-bill-payment/utility-status-enquiry` },
+    //       // ],
+    //     },
+    //     {
+    //       title: "Insurance Payment",
+    //       subItems: [
+    //         { title: "Fetch Insurance Bill Details", url: `${BASE_URL}/admin/InsurancePremiumPayment/FetchInsuranceBillDetails` },
+    //         { title: "Pay Insurance Bill", url: `${BASE_URL}/pay-insurance-bill` },
+    //         { title: "Insurance Status Enquiry", url: `${BASE_URL}/admin/InsurancePremiumPayment/InsuranceStatusEnquiry` },
+    //       ],
+    //     },
+    //     {
+    //       title: "Fastag Recharge",
+    //       subItems: [
+    //         { title: "Operator List", url: `${BASE_URL}/admin/FastagRecharge/FastagOperatorList` },
+    //         { title: "Fetch Consumer Details", url: `${BASE_URL}/admin/FastagRecharge/fetchConsumerDetails` },
+    //         { title: "Recharge", url: `${BASE_URL}/admin/FastagRecharge/fastagRecharge` },
+    //         { title: "Status", url: `${BASE_URL}/admin/FastagRecharge/FastagStatus` },
+    //       ],
+    //     },
+    //     {
+    //       title: "LPG Booking & Payment",
+    //       subItems: [
+    //         { title: "Operator List", url: `${BASE_URL}/admin/LPG/LPGOperator` },
+    //         { title: "Fetch LPG Details", url: `${BASE_URL}/admin/LPG/FetchLPGDetails` },
+    //         { title: "Pay Bill", url: `${BASE_URL}/admin/LPG/LPGBill` },
+    //         { title: "Status", url: `${BASE_URL}/admin/LPG/LPGStatus` },
+    //       ],
+    //     },
+    //     {
+    //       title: "Municipality Payment",
+    //       subItems: [
+    //         { title: "Operator List", url: `/admin/Municipality/MunicipalityOperator` },
+    //         { title: "Fetch Municipality Details", url: `${BASE_URL}/admin/Municipality/FetchMunicipalityDetails` },
+    //         { title: "Pay Bill", url: `${BASE_URL}/admin/Municipality/MunicipalityBill` },
+    //         { title: "Status", url: `${BASE_URL}/admin/Municipality/MunicipalityStatus` },
+    //       ],
+    //     },
+    //   ],
+    // },
   ];
 
   const visibleNavItems =

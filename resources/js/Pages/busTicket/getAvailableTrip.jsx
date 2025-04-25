@@ -4,8 +4,12 @@ import { Loader2 } from "lucide-react";
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const AvailableTrips = () => {
+  const { props: inertiaProps } = usePage();
+  const user = inertiaProps.auth?.user;
   const [formData, setFormData] = useState({
     source_id: "",
     destination_id: "",
@@ -44,6 +48,11 @@ const AvailableTrips = () => {
     setTrips([]);
 
     try {
+      if(user.verified !== 1)
+      {
+        router.visit('/getonboarding')
+        return;
+      }
       const response = await fetch("/Busticket/fetchAndStoreAvailableTrips", {
         method: "POST",
         headers: {

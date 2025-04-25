@@ -8,8 +8,12 @@ import { motion } from 'framer-motion';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const SearchByBeneId = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
     const [mobile, setMobile] = useState('');
     const [beneId, setBeneId] = useState('');
     const [responseData, setResponseData] = useState(null);
@@ -17,6 +21,11 @@ const SearchByBeneId = () => {
 
     const handleSearch = async () => {
         try {
+            if(user.verified !== 1)
+            {
+                router.visit('/getonboarding')
+                return;
+            }
             const response = await axios.post('/DMT/searchByBeneIdStore', { mobile, bene_id: beneId });
             setResponseData(response.data);
             setError(null);

@@ -1,47 +1,84 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
 
 const BillFetch = () => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
-  const [selectedMobile, setSelectedMobile] = useState("989899084");
+  // const [showPopup, setShowPopup] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(true);
+  // const [selectedMobile, setSelectedMobile] = useState("989899084");
 
-  const billDetails = {
-    id: "CC015043BAAE00070142",
-    bid: "OTME00005XXZ43",
-    customerNumber: "9878767891",
-    bd: "2015-06-14",
-    bp: "june",
-    bn: "120303",
-    dd: "2015-06-20",
-    ba: "1000",
-    cc: "0",
-    ta: "1500",
-    dt: "2/12/2025",
-    ic: "MOB",
-    pm: "Cash",
-    // an: "142345677",
-    billerName: "OTME",  
-    a: "10",
-    ab: "20",
-    abc: "30",
-    abcd: "40",
-    abcde: "50",
-    customerName: "Bharat Connect",
-    billDate: "2015-06-14",
-    dueDate: "2015-06-20",
-    billNumber: "12303",
-    mobileNumber: "989899084",
-    billAmount: "1000",
-    latePaymentFee: "40",
-    additionalCharges: "60",
-    totalAmount: "1000",
-    transactionStatus: "Success",
-    approvalNumber: "12345037",
-  };
+  const [billDetails, setBillDetails] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedMobile, setSelectedMobile] = useState("989899084");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+
+   // 🚀 Fetch bill details when component mounts
+   useEffect(() => {
+    const fetchBillDetails = async () => {
+      try {
+        const response = await axios.post("/bill/fetchbill");
+        console.log(response.data); // Replace with your actual endpoint
+        setBillDetails(response.data);
+      } catch (err) {
+        setError("Failed to fetch bill data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBillDetails();
+  }, []);
+
+  if (loading) {
+    return <div className="p-6 text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-center text-red-500">{error}</div>;
+  }
+
+
+  // const billDetails = {
+  //   id: "CC015043BAAE00070142",
+  //   bid: "OTME00005XXZ43",
+  //   customerNumber: "9878767891",
+  //   bd: "2015-06-14",
+  //   bp: "june",
+  //   bn: "120303",
+  //   dd: "2015-06-20",
+  //   ba: "1000",
+  //   cc: "0",
+  //   ta: "1500",
+  //   dt: "2/12/2025",
+  //   ic: "MOB",
+  //   pm: "Cash",
+  //   // an: "142345677",
+  //   billerName: "OTME",  
+  //   a: "10",
+  //   ab: "20",
+  //   abc: "30",
+  //   abcd: "40",
+  //   abcde: "50",
+  //   customerName: "Bharat Connect",
+  //   billDate: "2015-06-14",
+  //   dueDate: "2015-06-20",
+  //   billNumber: "12303",
+  //   mobileNumber: "989899084",
+  //   billAmount: "1000",
+  //   latePaymentFee: "40",
+  //   additionalCharges: "60",
+  //   totalAmount: "1000",
+  //   transactionStatus: "Success",
+  //   approvalNumber: "12345037",
+  // };
 
   const mobileOptions = ["Cash", "PhonePe", "Card"];
 
@@ -65,19 +102,19 @@ const BillFetch = () => {
                 <input type="text" className="w-full p-2 border rounded-md bg-gray-100 text-sm" value={billDetails.a} disabled />
               </div>
               <div>
-                <label className="block font-medium capitalize text-sm">AB</label>
+                <label className="block font-medium capitalize text-sm">A B</label>
                 <input type="text" className="w-full p-2 border rounded-md bg-gray-100 text-sm" value={billDetails.ab} disabled />
               </div>
               <div>
-                <label className="block font-medium capitalize text-sm">ABC</label>
+                <label className="block font-medium capitalize text-sm">A B C</label>
                 <input type="text" className="w-full p-2 border rounded-md bg-gray-100 text-sm" value={billDetails.abc} disabled />
               </div>
               <div>
-                <label className="block font-medium capitalize text-sm">ABCD</label>
+                <label className="block font-medium capitalize text-sm">A B C D</label>
                 <input type="text" className="w-full p-2 border rounded-md bg-gray-100 text-sm" value={billDetails.abcd} disabled />
               </div>
               <div>
-                <label className="block font-medium capitalize text-sm">ABCDE</label>
+                <label className="block font-medium capitalize text-sm">A B C D E</label>
                 <input type="text" className="w-full p-2 border rounded-md bg-gray-100 text-sm" value={billDetails.abcde} disabled />
               </div>
               <div>

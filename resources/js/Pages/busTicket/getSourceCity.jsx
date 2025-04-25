@@ -4,8 +4,12 @@ import { Loader2, Search } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const CityList = () => {
+  const { props: inertiaProps } = usePage();
+  const user = inertiaProps.auth?.user;
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +25,11 @@ const CityList = () => {
         const token = document
           .querySelector('meta[name="csrf-token"]')
           ?.getAttribute("content");
-
+        if(user.verified !== 1)
+        {
+          router.visit('/getonboarding')
+          return;
+        }
         const response = await fetch("/busTicket/fetchSourceCities", {
           method: "POST",
           headers: {
