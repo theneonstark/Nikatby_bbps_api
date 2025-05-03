@@ -385,9 +385,33 @@ export const addMember = async (memberData) => {
 
 export const deleteMember = async (id, userType) => {
     try {
-        const response = await axios.delete(`${BASE_URL}/admin/member/delete/${id}`, {
+        const response = await axios.get(`${BASE_URL}/admin/member/delete/${id}`, {
             data: { user_type: userType },
         });
+       
+        console.log(response);
+                        
+        //                 if(response.error){
+        //                     alert(response.error)
+        //                 }
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting member:', error);
+        throw error;
+    }
+};
+
+export const retrivedeleteMember = async (id, userType) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/admin/member/delete/reterive/${id}`, {
+            data: { user_type: userType },
+        });
+       
+        console.log(response);
+                        
+        //                 if(response.error){
+        //                     alert(response.error)
+        //                 }
         return response.data;
     } catch (error) {
         console.error('Error deleting member:', error);

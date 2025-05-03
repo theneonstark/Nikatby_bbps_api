@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Http;
 
 class AuthanticationController
 {
@@ -51,9 +52,21 @@ class AuthanticationController
             if(Auth::user()->role === 1){               
                 return Inertia::location('/adminDashboard');
             }
-            return Inertia::location('/dashboard');
+            else{
+               if(Auth::user()->role === 0 && Auth::user()->verified !== 1){
+                    return Inertia::location('/getonboarding');
+                }
+               elseif(Auth::user()->status == false){
+                return redirect()->intended('/dashboard');
+               }
+               else{
+                return back()->withErrors([
+                    'email' => 'Your Account is Currently Deactivated.',
+                ]);
+               }
+            }
             // return view('test');
-            // return redirect()->intended('/dashboard');
+             
         //     // Use Inertia redirect instead of Laravel redirect
         }
         
@@ -67,5 +80,16 @@ class AuthanticationController
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return Inertia::location('/');
+    }
+    public function fetchBill()
+    {
+        dd('fkjjg');
+        $response = Http::post('http://127.0.0.1:8001/api/bill/fetchbill');
+
+        if ($response->successful()) {
+        return response()->json($response->json());
+        } else {
+        return response()->json(['error' => 'Failed to fetch billers'], 500);
+        }
     }
 }

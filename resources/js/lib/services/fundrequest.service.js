@@ -9,14 +9,21 @@ const BASE_URL = import.meta.env.VITE_APP_SERVER === "PRODUCTION"
 axios.defaults.withCredentials = true;
 
 // Recharge APIs
-export const FundRequestStatus = async (id, status) => {
-    const response = await axios.put(`${BASE_URL}/api/fund-requests/${id}/status`,{status});
-    return response;
-};
-export const FundRequestData = async (id) => {
-    const response = await axios.get(`/api/fund-requests`);
-    console.log(response);
+export const FundRequestData = async () => {
+    const response = await axios.get('/fund-requests');
     
-
-    return response.data.fund_requests;
+    return response.data;
+  };
+  
+export const FundRequestStatus = async (id, newStatus) => {
+    if (confirm('Are you sure?')) {
+        await axios.post(`/fund-requests/${id}/status`, { status: newStatus });
+    }
+    
+};
+export const FundRequestStatusInActive = async (id, newStatus) => {
+    if (confirm('Are you sure?')) {
+        await axios.post(`/fund-requests/inActive/${id}/status`, { status: newStatus });
+    }
+    
 };

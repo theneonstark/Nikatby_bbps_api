@@ -7,8 +7,17 @@ import { motion } from 'framer-motion';
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
+
 
 export default function SearchRemitter() {
+    const { props: inertiaProps } = usePage();
+      const user = inertiaProps.auth?.user;
+    //   const userverified = user?.verified || 1;
+      console.log('Verified');
+      
+      console.log(user.verified)
     const [mobile, setMobile] = useState('');
     const [remitter, setRemitter] = useState(null);
     const [error, setError] = useState('');
@@ -24,10 +33,16 @@ export default function SearchRemitter() {
         setShowResult(false);
 
         try {
+            if(user.verified !== 1)
+            {
+                router.visit('/getonboarding')
+                return;
+            }
             const response = await axios.post('/search-remitter', { mobile });
+            
             console.log(response.data);
             // return response.data;
-            if (response.data.remitter) {
+            if (response.data.remitter && user.verified ===  1) {
                 setRemitter(response.data.remitter);
                 setError('');
                 setShowResult(true);

@@ -7,8 +7,12 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 export default function RemitterAadharVerification() {
+    const { props: inertiaProps } = usePage();
+          const user = inertiaProps.auth?.user;
     const [mobile, setMobile] = useState('');
     const [aadhaar_no, setAadhar] = useState('');
     const [error, setError] = useState('');
@@ -27,8 +31,12 @@ export default function RemitterAadharVerification() {
 
         try {
             const response = await axios.post('/remitter-aadhar-verification', { mobile, aadhaar_no });
-            console.log(response.data);
-            if (response.data.success) {
+             if(user.verified !== 1)
+                {
+                    router.visit('/getonboarding')
+                }
+            // console.log(response.data);
+            if (response.data.success && user.verified ===  1) {
                 setSuccessMessage(response.data.message);
                 setTimeout(() => setSuccessMessage(''), 30000000);
             } else {

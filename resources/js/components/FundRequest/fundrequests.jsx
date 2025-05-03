@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FundRequestData, FundRequestStatus } from '@/lib/services/fundrequest.service';
+import { FundRequestStatusInActive, FundRequestData, FundRequestStatus } from '@/lib/services/fundrequest.service';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ export default function FundRequest() {
   const fetchFundRequests = async () => {
     try {
       const response = await FundRequestData();
+      // console.log(response);
       setFundRequests(Array.isArray(response) ? response : []);
     } catch (error) {
       console.error('Failed to fetch fund requests:', error);
@@ -26,6 +27,15 @@ export default function FundRequest() {
     try {
       const newStatus = currentStatus === 0 ? 1 : 0; // Toggle status
       await FundRequestStatus(id, newStatus);
+      fetchFundRequests(); // Refresh the list
+    } catch (error) {
+      console.error('Error switching status:', error);
+    }
+  };
+  const handleSwitchStatusInActive = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 0 ? 1 : 0; // Toggle status
+      await FundRequestStatusInActive(id, newStatus);
       fetchFundRequests(); // Refresh the list
     } catch (error) {
       console.error('Error switching status:', error);
@@ -65,15 +75,15 @@ export default function FundRequest() {
               {inactiveRequests.length > 0 ? (
                 inactiveRequests.map((request) => (
                   <TableRow key={request.id}>
-                    <TableCell>{request.transaction_type}</TableCell>
-                    <TableCell>{request.amount}</TableCell>
-                    <TableCell>{request.transaction_id}</TableCell>
-                    <TableCell>{request.deposited_date}</TableCell>
-                    <TableCell>{request.bank ? request.bank.bank : 'N/A'}</TableCell>
-                    <TableCell>{request.status === 0 ? 'Inactive' : 'Active'}</TableCell>
+                    <TableCell>{request.txn_type}</TableCell>
+                    <TableCell>{request.credit_balance}</TableCell>
+                    <TableCell>{request.txn_id}</TableCell>
+                    <TableCell>{request.deposite_date}</TableCell>
+                    <TableCell>{request.bank_name ? request.bank_name : 'N/A'}</TableCell>
+                    <TableCell className="text-red-500 font-bold">{request.status === 0 ? 'Inactive' : 'Active'}</TableCell>
                     <TableCell>
-                      {request.image_path ? (
-                        <a href={request.image_path} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                      {request.image_proff ? (
+                        <a href={`/storage/${request.image_proff}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                           View
                         </a>
                       ) : (
@@ -85,7 +95,7 @@ export default function FundRequest() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleSwitchStatus(request.id, request.status)}
-                        className="bg-blue-500 text-white hover:bg-blue-600"
+                        className="bg-red-500 text-white hover:bg-blue-600 font-bold"
                       >
                         Switch to Active
                       </Button>
@@ -120,15 +130,15 @@ export default function FundRequest() {
               {activeRequests.length > 0 ? (
                 activeRequests.map((request) => (
                   <TableRow key={request.id}>
-                    <TableCell>{request.transaction_type}</TableCell>
-                    <TableCell>{request.amount}</TableCell>
-                    <TableCell>{request.transaction_id}</TableCell>
-                    <TableCell>{request.deposited_date}</TableCell>
-                    <TableCell>{request.bank ? request.bank.bank : 'N/A'}</TableCell>
-                    <TableCell>{request.status === 0 ? 'Inactive' : 'Active'}</TableCell>
+                    <TableCell>{request.txn_type}</TableCell>
+                    <TableCell>{request.debit_balance}</TableCell>
+                    <TableCell>{request.txn_id}</TableCell>
+                    <TableCell>{request.deposite_date}</TableCell>
+                    <TableCell>{request.bank_name ? request.bank_name : 'N/A'}</TableCell>
+                    <TableCell className="text-green-500 font-bold">{request.status === 0 ? 'Inactive' : 'Active'}</TableCell>
                     <TableCell>
-                      {request.image_path ? (
-                        <a href={request.image_path} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                      {request.image_proff ? (
+                        <a href={`/storage/${request.image_proff}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                           View
                         </a>
                       ) : (
@@ -137,12 +147,14 @@ export default function FundRequest() {
                     </TableCell>
                     <TableCell>
                       <Button
+                        // disabled
                         variant="outline"
                         size="sm"
-                        onClick={() => handleSwitchStatus(request.id, request.status)}
+                        onClick={() => handleSwitchStatusInActive(request.id, request.status)}
                         className="bg-blue-500 text-white hover:bg-blue-600"
                       >
                         Switch to Inactive
+                        {/* Activated */}
                       </Button>
                     </TableCell>
                   </TableRow>

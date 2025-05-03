@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Search, RotateCcw, FileText } from 'lucide-react';
-import { getRoles, getAllMembers, addMember, deleteMember } from '@/lib/apis';
+import { retrivedeleteMember, getRoles, getAllMembers, addMember, deleteMember } from '@/lib/apis';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import Navbar from "@/Layouts/newLayout/navbar";
+import { usePage } from "@inertiajs/react";
 
 
 const MemberDetails = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
+    // console.log(user.role);
+    
     const [roles, setRoles] = useState([]);
     const [activeTab, setActiveTab] = useState('');
     const [allData, setAllData] = useState({});
@@ -20,7 +25,7 @@ const MemberDetails = () => {
     const [error, setError] = useState(null);
 
     const [formData, setFormData] = useState({
-        role: '',
+        roling: '',
         name: '',
         email: '',
         company: '',
@@ -39,13 +44,13 @@ const MemberDetails = () => {
             try {
                 // Fetch roles dynamically
                 const fetchedRoles = await getRoles();
-                const roleNames = fetchedRoles.map(role => role.name);
+                const roleNames = fetchedRoles.map(roling => roling.name);
                 console.log('Fetched roles:', roleNames); // Debug log
                 setRoles(roleNames);
 
                 if (roleNames.length > 0) {
                     setActiveTab(roleNames[0]);
-                    setFormData(prev => ({ ...prev, role: roleNames[0] }));
+                    setFormData(prev => ({ ...prev, roling: roleNames[0] }));
                 }
 
                 // Fetch all members
@@ -133,10 +138,32 @@ const MemberDetails = () => {
         a.click();
         window.URL.revokeObjectURL(url);
     };
+    const handleRetriveDeleted = async (memberId) => {
+        if (window.confirm('Are you sure you want to activate this member?')) {
+            try {
+                // if(user.role === 1){
+                //     alert('You Already Activated')
+                //     return
+                // }
+                await retrivedeleteMember(memberId);
+                const updatedData = await getAllMembers();
+                setAllData(updatedData);
+                const dataKey = `${activeTab}s`;
+                filterData(activeTab, updatedData[dataKey] || [], searchValue, fromDate, toDate, company);
+                alert('Member retrive successfully.');
+            } catch (error) {
+                setError('Failed to activate member: ' + error.message);
+            }
+        }
+    };
 
     const handleDelete = async (memberId) => {
         if (window.confirm('Are you sure you want to deactivate this member?')) {
             try {
+                if(memberId === 8){
+                    alert('Can not Delete Admin')
+                    // return
+                }
                 await deleteMember(memberId);
                 const updatedData = await getAllMembers();
                 setAllData(updatedData);
@@ -173,7 +200,7 @@ const MemberDetails = () => {
             }
 
             setFormData({
-                role: roles[0] || '',
+                roling: roles[0] || '',
                 name: '',
                 email: '',
                 company: '',
@@ -207,14 +234,14 @@ const MemberDetails = () => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Role</label>
                             <select
-                                name="role"
-                                value={formData.role}
+                                name="roling"
+                                value={formData.roling}
                                 onChange={handleFormChange}
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                             >
-                                {roles.map(role => (
-                                    <option key={role} value={role}>
-                                        {role.charAt(0).toUpperCase() + role.slice(1)}
+                                {roles.map(roling => (
+                                    <option key={roling} value={roling}>
+                                        {roling.charAt(0).toUpperCase() + roling.slice(1)}
                                     </option>
                                 ))}
                             </select>
@@ -385,13 +412,13 @@ const MemberDetails = () => {
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-4">Home - Member Details</h1>
             <div className="bg-gray-200 p-2 rounded-t-lg">
-                {roles.map(role => (
+                {roles.map(roling => (
                     <button
-                        key={role}
-                        onClick={() => handleTabChange(role)}
-                        className={`px-4 py-2 mr-2 rounded-t-lg ${activeTab === role ? 'bg-yellow-500 text-white' : 'bg-gray-300'}`}
+                        key={roling}
+                        onClick={() => handleTabChange(roling)}
+                        className={`px-4 py-2 mr-2 rounded-t-lg ${activeTab === roling ? 'bg-yellow-500 text-white' : 'bg-gray-300'}`}
                     >
-                        {role.charAt(0).toUpperCase() + role.slice(1)}
+                        {roling.charAt(0).toUpperCase() + roling.slice(1)}
                     </button>
                 ))}
             </div>
@@ -501,15 +528,18 @@ const MemberDetails = () => {
                                             <select
                                                 className="border border-gray-300 rounded-md p-1"
                                                 onChange={(e) => {
-                                                    if (e.target.value === 'action') return;
+                                                    if (e.target.value === 'activate')
+                                                    {
+                                                        handleRetriveDeleted(item.id);
+                                                    }
                                                     if (e.target.value === 'delete' && activeTab !== 'deactivated') {
                                                         handleDelete(item.id);
                                                     }
                                                 }}
                                             >
-                                                <option value="action">Action</option>
+                                                {/* <option value="action">Action</option> */}
+                                                <option value="activate">Activate</option>
                                                 {activeTab !== 'deactivated' && <option value="delete">Deactivate</option>}
-                                                <option value="reports">Reports</option>
                                             </select>
                                         </td>
                                     </tr>

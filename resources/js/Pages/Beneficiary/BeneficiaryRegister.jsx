@@ -10,8 +10,12 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Inertia } from '@inertiajs/inertia';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const RegisterBeneficiary = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
     const [mobile, setMobile] = useState('');
     const [beneficiaryName, setBeneficiaryName] = useState('');
     const [bankId, setBankId] = useState('');
@@ -47,8 +51,14 @@ const RegisterBeneficiary = () => {
                 ifsccode,
                 verified
             });
+            if(user.verified !== 1)
+            {
+                router.visit('/getonboarding')
+            }
+            if(response.data && user.verified ===  1){
             setResponseData(response.data);
             alert('Beneficiary registered successfully');
+            }
         } catch (error) {
             console.error('Registration failed', error);
             alert('Registration failed');

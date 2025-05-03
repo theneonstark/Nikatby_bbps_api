@@ -21,6 +21,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'company',
+        'pancard_number',
+        'aadhaar_number',
+        'mobile',
+        'address',
+        'state',
+        'city',
+        'pincode',
     ];
 
     /**

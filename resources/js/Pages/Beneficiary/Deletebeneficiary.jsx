@@ -8,8 +8,12 @@ import axios from 'axios';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const DeleteBeneficiary = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
     const [mobile, setMobile] = useState('');
     const [beneficiaryId, setBeneficiaryId] = useState('');
     const [responseData, setResponseData] = useState(null);
@@ -26,8 +30,14 @@ const DeleteBeneficiary = () => {
 
         try {
             const response = await axios.post('/DMT/deleteBeneficiaryStore', { mobile, beneficiaryId });
+            if(user.verified !== 1)
+            {
+                router.visit('/getonboarding')
+            }
+            if(response.data && user.verified ===  1){
             setResponseData(response.data);
             alert('Beneficiary deleted successfully');
+            }
         } catch (error) {
             console.error('Deletion failed', error);
             alert('Deletion failed');

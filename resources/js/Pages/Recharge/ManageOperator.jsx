@@ -5,6 +5,8 @@ import axios from "axios";
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 const Alert = ({ children, variant }) => {
   const bgColor = variant === "destructive" ? "bg-red-50 border-red-200 text-red-700" : "bg-green-50 border-green-200 text-green-700";
   return (
@@ -65,6 +67,11 @@ const Operators = () => {
     }
 
     try {
+      if(user.verified !== 1)
+      {
+        router.visit('/getonboarding')
+        return;
+      }
       setLoading(true);
       const apiUrl = 'https://sit.paysprint.in/service-api/api/v1/service/recharge/recharge/getoperator';
       const headers = {
@@ -145,6 +152,11 @@ const Operators = () => {
     setSuccess(null);
 
     try {
+      if(user.verified !== 1)
+      {
+        router.visit('/getonboarding')
+        return;
+      }
       const formattedData = {
         operator_name: formData.operatorName,
         service_name: formData.serviceTypeName,

@@ -5,8 +5,12 @@ import { Button } from '@/components/ui/button';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const ClaimRefund = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
     const [formData, setFormData] = useState({
         ackno: '',
         referenceid: '',
@@ -21,8 +25,14 @@ const ClaimRefund = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if(user.verified !== 1)
+            {
+               router.visit('/getonboarding')
+            }
+            else{
             const res = await axios.post('/DMT/claimRefundStore', formData);
             setResponse(res.data);
+            }
         } catch (err) {
             setResponse(err.response.data);
         }

@@ -28,4 +28,5 @@ return Application::configure(basePath: dirname(__DIR__))
     $app->routeMiddleware([
         'auth' => App\Http\Middleware\Authenticate::class,
         'isAdmin' => App\Http\Middleware\IsAdmin::class,
+        'onBoard' => App\Http\Middleware\OnBoarding::class,
     ]);

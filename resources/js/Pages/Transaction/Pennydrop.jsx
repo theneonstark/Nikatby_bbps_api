@@ -8,8 +8,12 @@ import { motion } from 'framer-motion';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const PennyDrop = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
     const [formData, setFormData] = useState({
         mobile: '',
         accno: '',
@@ -31,8 +35,14 @@ const PennyDrop = () => {
     const handleSubmit = async () => {
         try {
             const response = await axios.post('/DMT/pennyDrop', formData);
+            if(user.verified !== 1)
+            {
+              router.visit('/getonboarding')
+            }
+            if(response.data && user.verified ===  1){
             setResponse(response.data);
             alert('Penny Drop Verification Successful');
+            }
         } catch (error) {
             alert('Verification failed');
             setResponse({ success: false, message: 'Verification failed' });

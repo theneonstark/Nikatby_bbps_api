@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeEmail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class MemberController extends Controller
@@ -27,6 +28,7 @@ class MemberController extends Controller
         // dd($roles);
         $roleMap = $roles->pluck('name', 'id')->toArray();
         Log::info('Roles fetched from Roles model:', ['roles' => $roleMap]);
+        // dd($roleMap);
 
         // Fetch all users
         $users = User::all();
@@ -35,10 +37,11 @@ class MemberController extends Controller
 
         // Map numeric role IDs to role names
         $users = $users->map(function ($user) use ($roleMap) {
-            $roleName = isset($roleMap[$user->role]) ? $roleMap[$user->role] : 'unknown';
+            $roleName = isset($roleMap[$user->roling]) ? $roleMap[$user->roling] : 'unknown';
             $user->role_name = $roleName;
             return $user;
         });
+        // dd($users);
 
         Log::info('Users with role names:', ['users' => $users->toArray()]);
 
@@ -48,6 +51,7 @@ class MemberController extends Controller
             $key = strtolower($roleName) . 's'; // e.g., "admins", "apiusers", "retailers"
             $data[$key] = $users->where('role_name', $roleName)->values();
         }
+        // dd($data);
 
         Log::info('Grouped data:', ['data' => $data]);
 
@@ -61,7 +65,7 @@ class MemberController extends Controller
         Log::info('Role names for validation:', ['roleNames' => $roleNames]);
     
         $validated = $request->validate([
-            'role' => 'required',
+            'roling' => 'required',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'company' => 'nullable|string|max:255',
@@ -77,20 +81,31 @@ class MemberController extends Controller
         try {
             // Create a copy of the request data
             $data = $request->all();
-            
-            // // Find role ID by name
-            // $role = Roles::whereRaw('LOWER(name) = ?', [strtolower($validated['role'])])->first();
-            
-            // if (!$role) {
-            //     Log::warning('Invalid role selected, defaulting to role ID 0', ['role' => $validated['role']]);
-            //     $roleId = 0; // Default role ID if mapping fails
-            // } else {
-            //     $roleId = $role->id;
-            //     Log::info('Mapped role ID:', ['role_id' => $roleId]);
+            // dd($data['roling']);
+            // dd($data['role']);
+            if($data['roling'] === 'apiuser'){
+                $data['roling'] = '2';
+            }
+            elseif($data['roling'] === 'whitelable'){
+                $data['roling'] = '3';
+            }
+            elseif($data['roling'] === 'admin'){
+                $data['roling'] = '1';
+            }
+            else{
+                $data['roling'] = '5';
+            }
+            // switch($data['role']){
+            //     case 'apiuser':
+            //         return $data['role'] = '2';
+            //     case 'whitelable':
+            //         return $data['role'] = '3';
+            //     case 'Demo User':
+            //         return $data['role'] = '5';
+            //     default:
+            //         return 'Check Membercontroller Please Here is Hardcoded for Temporary.';
             // }
-            
-            // // Explicitly set the role ID in the data array
-            // $data['role'] = $roleId;
+            // dd($data['role']);
             
             $generatedPassword = null;
     
@@ -130,31 +145,50 @@ class MemberController extends Controller
 
         try {
             $member = User::findOrFail($id);
+            // dd($member->id);
 
             // Fetch role names to check if the user is an admin
             $roles = Roles::pluck('name', 'id')->toArray();
             $roleName = isset($roles[$member->role]) ? $roles[$member->role] : 'unknown';
+            // dd($roleName);
 
-            if ($roleName === 'admin' && $member->id === $mainAdminId) {
+            if ($roleName === 'admin' && $member->role === $mainAdminId) {
                 return response()->json(['error' => 'Cannot deactivate the main admin'], 403);
             }
+            $member->status = true;
+            $member->save();
 
             // Fetch the ID of the 'deactivated' role
-            $deactivatedRole = Roles::where('name', 'deactivated')->first();
-            if (!$deactivatedRole) {
-                throw new \Exception('Deactivated role not found');
-            }
+            // $deactivatedRole = Roles::where('name', 'deactivated')->first();
+            // dd($deactivatedRole);
+            // if (!$deactivatedRole) {
+            //     throw new \Exception('Deactivated role not found');
+            // }
 
-            if ($member->role != $deactivatedRole->id) {
-                $member->role = $deactivatedRole->id;
-                $member->deactivation_reason = $request->input('deactivation_reason', 'Deactivated on ' . now());
-                $member->save();
-            }
+            // if ($member->role != $deactivatedRole->id) {
+            //     $member->role = $deactivatedRole->id;
+            //     $member->deactivation_reason = $request->input('deactivation_reason', 'Deactivated on ' . now());
+            //     $member->save();
+            // }
 
             return response()->json(['message' => 'Member deactivated successfully'], 200);
         } catch (\Exception $e) {
             \Log::error("Failed to deactivate member: " . $e->getMessage());
             return response()->json(['error' => 'Failed to deactivate member: ' . $e->getMessage()], 500);
+        }
+    }
+    public function reterivedeleteMember(Request $request, $id){
+        try{
+            $member = User::findOrFail($id);
+            $member->status = false;
+            // dd($member);
+            $member->save();
+        }
+        catch (\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => 'Faild' . $e,
+            ]);
         }
     }
 }

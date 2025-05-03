@@ -9,8 +9,13 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Inertia } from '@inertiajs/inertia';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
+
 
 const RegisterRemitter = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
     const [accessMode, setAccessMode] = useState('SITE');
     const [mobile, setMobile] = useState('');
     const [otp, setOtp] = useState('');
@@ -45,9 +50,14 @@ const RegisterRemitter = () => {
                 accessMode,
                 isIris
             });
+            if(user.verified !== 1)
+            {
+                router.visit('/getonboarding')
+            }
+
 
             // Handle success
-            if (response.props.flash.success) {
+            if (response.props.flash.success && user.verified ===  1) {
                 alert('Remitter registered successfully');
             } else {
                 alert('Registration failed: ' + response.props.flash.errors.message);

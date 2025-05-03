@@ -5,8 +5,12 @@ import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const TransactionSendOtp = () => {
+  const { props: inertiaProps } = usePage();
+  const user = inertiaProps.auth?.user;
   const [formData, setFormData] = useState({
     mobile_number: '',
     reference_id: '',
@@ -32,8 +36,15 @@ const TransactionSendOtp = () => {
     e.preventDefault();
     setErrors({});
     try {
+      if(user.verified !== 1)
+      {
+       router.visit('/getonboarding')
+      }
+      else{
       const res = await axios.post('/DMT/transactionSendOtp', formData);
+
       setResponse(res.data);
+      }
     } catch (err) {
       if (err.response?.status === 422) {
         setErrors(err.response.data.errors);

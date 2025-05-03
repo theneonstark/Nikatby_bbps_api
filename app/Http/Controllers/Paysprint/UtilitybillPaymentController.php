@@ -80,7 +80,7 @@ class UtilitybillPaymentController
             // $operators = UtilityOperator::where('category', $category)->pluck('name');
             // dd($categories);
             $categories = UtilityOperator::all()->groupBy('category')->keys();
-            // dd($categories);
+            dd($categories);
                 // ->paginate(10)
                 // ->through(function ($operator) {
                 //     // dd('Bill');

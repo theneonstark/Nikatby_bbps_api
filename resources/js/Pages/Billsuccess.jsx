@@ -1,10 +1,27 @@
-import React from "react";
+// import React from "react";
 import { motion } from "framer-motion";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import React, { useEffect, useState } from "react";
 
 const BillSuccess = () => {
+  const [paymentDetails, setPaymentDetails] = useState([]);
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+      try {
+        const response = await axios.get("/bill/paybill");
+        console.log(response.data);
+        
+        
+        setPaymentDetails(response.data);
+        console.log(paymentDetails.data);
+      } catch (err) {
+        setError("Failed to fetch payment data");
+      }
+    };
+    fetchPaymentDetails();
+  }, []);
   const successDetails = {
     transactionIds: "CC015043BAAE0007142",
     billerId: "OTME00005XXZ43",

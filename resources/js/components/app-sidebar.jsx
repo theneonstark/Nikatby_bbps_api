@@ -15,6 +15,7 @@ import {
   ShieldCheckIcon,
   BanknoteIcon,
   LandmarkIcon,
+  HandCoins,
 } from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
@@ -77,9 +78,14 @@ export function AppSidebar({ ...props }) {
       url: userrole === 1 ? `${BASE_URL}/adminDashboard` : `${BASE_URL}/dashboard`,
     },
     {
+      title: userrole !== 1 ? "Fund Request": undefined,
+      icon: HandCoins,
+      url: '/funRequest',
+    },
+    {
       title: "Services",
       icon: ListIcon,
-      url: `${BASE_URL}/services`,
+      url: `${BASE_URL}/bill/services`,
       // subItems: [{ title: "All Services", url: "/services" }],
     },
     {
@@ -182,11 +188,8 @@ export function AppSidebar({ ...props }) {
     {
       title: "Member Details",
       icon: UsersIcon ,
-<<<<<<< HEAD
-      url: "/admin/members",
-=======
+       url: `${BASE_URL}/admin/members`,
       url: `${BASE_URL}/admin/members`,
->>>>>>> 0f1e84538ae261690aa45f5ef2b21b31b209bb53
     },
     {
       title: "Bank Details",
@@ -194,12 +197,12 @@ export function AppSidebar({ ...props }) {
       url: `${BASE_URL}/admin/bank`,
     },
     {
-      title: "Fund Request",
+      title: userrole === 1 ?"Fund Request" : undefined,
       icon: BanknoteIcon ,
       url: `${BASE_URL}/admin/fund/request`,
     },
     {
-      title: "IP Whitelisting",
+      title: "IP Request",
       icon: ShieldCheckIcon ,
       url: `${BASE_URL}/admin/ip-whitelisting`,
     },
@@ -213,22 +216,13 @@ export function AppSidebar({ ...props }) {
         },
         {
           title: "Bill Payment",
-<<<<<<< HEAD
           url: "/admin/utility-bill-payment/operator-list",
           // subItems: [
-          //   { title: "Operator List", url: "/admin/utility-bill-payment/operator-list" },
-          //   { title: "Fetch Bill Details", url: "/admin/utility-bill-payment/fetch-bill-details" },
-          //   { title: "Pay Bill", url: "/admin/utility-bill-payment/pay-bill" },
-          //   { title: "Status Enquiry", url: "/admin/utility-bill-payment/utility-status-enquiry" },
+          //   { title: "Operator List", url: `${BASE_URL}/admin/utility-bill-payment/operator-list` },
+          //   { title: "Fetch Bill Details", url: `${BASE_URL}/admin/utility-bill-payment/fetch-bill-details` },
+          //   { title: "Pay Bill", url: `${BASE_URL}/admin/utility-bill-payment/pay-bill` },
+          //   { title: "Status Enquiry", url: `${BASE_URL}/admin/utility-bill-payment/utility-status-enquiry` },
           // ],
-=======
-          subItems: [
-            { title: "Operator List", url: `${BASE_URL}/admin/utility-bill-payment/operator-list` },
-            { title: "Fetch Bill Details", url: `${BASE_URL}/admin/utility-bill-payment/fetch-bill-details` },
-            { title: "Pay Bill", url: `${BASE_URL}/admin/utility-bill-payment/pay-bill` },
-            { title: "Status Enquiry", url: `${BASE_URL}/admin/utility-bill-payment/utility-status-enquiry` },
-          ],
->>>>>>> 0f1e84538ae261690aa45f5ef2b21b31b209bb53
         },
         {
           title: "Insurance Payment",
@@ -267,12 +261,17 @@ export function AppSidebar({ ...props }) {
         },
       ],
     },
+    {
+      title: "IP Whitelisting",
+      icon: ShieldCheckIcon ,
+      url: `${BASE_URL}/user/ipwhitelist`,
+    },
   ];
 
   const visibleNavItems =
     userrole === 1
-      ? navItems.filter((item) => ["Dashboard", "Recharge", "LIC", "Roles & Permission", "Commission", "Member Details", "Bank Details", "Fund Request", "IP Whitelisting"].includes(item.title))
-      : navItems.filter((item) => ["Dashboard", "Services", "Complaint", "DMT 2", "Bus Booking", "Recharge", "Utilities"].includes(item.title));
+      ? navItems.filter((item) => ["Dashboard", "Recharge", "LIC", "Roles & Permission", "Commission", "Member Details", "Bank Details", "Fund Request", "IP Request"].includes(item.title))
+      : navItems.filter((item) => ["Dashboard", "Services", "Complaint", "DMT 2", "Bus Booking", "Recharge", "Utilities", "Fund Request", "IP Whitelisting"].includes(item.title));
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>

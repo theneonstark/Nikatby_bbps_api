@@ -8,8 +8,13 @@ import { motion } from 'framer-motion';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { usePage } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 const FetchBeneficiary = () => {
+    const { props: inertiaProps } = usePage();
+    const user = inertiaProps.auth?.user;
+
     const [mobile, setMobile] = useState('');
     const [responseData, setResponseData] = useState(null);
     const [error, setError] = useState(null);
@@ -17,8 +22,14 @@ const FetchBeneficiary = () => {
     const handleFetch = async () => {
         try {
             const response = await axios.post('/DMT/fetchBeneficiaryDetail', { mobile });
+            if(user.verified !== 1)
+            {
+               router.visit('/getonboarding')
+            }
+            if(response.data && user.verified ===  1){
             setResponseData(response.data);
             setError(null);
+            }
         } catch (err) {
             setError('Failed to fetch beneficiary');
             setResponseData(null);

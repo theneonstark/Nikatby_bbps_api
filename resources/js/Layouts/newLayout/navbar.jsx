@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Bell, Search, User, Wallet, CreditCard } from 'lucide-react';
 import { balanceApi } from '@/lib/apis';
 import { usePage } from '@inertiajs/react';
+import { SidebarTrigger } from "@/components/ui/sidebar";
+
 
 const Navbar = () => {
   const { props } = usePage();
@@ -77,6 +79,7 @@ const Navbar = () => {
 
   return (
     <header className="bg-white shadow-sm py-4 px-6 flex items-center justify-between">
+    <SidebarTrigger className="-ml-1" />
     
     <div className="flex items-center gap-4">
         <div className="relative">

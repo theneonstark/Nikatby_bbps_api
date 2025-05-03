@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\BBPS\BbpsController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\Controllers\Auth\AuthanticationController;
 use App\Http\Controllers\Controllers\Controllers\Auth\AuthanticationController as AuthAuthanticationController;
@@ -12,25 +13,47 @@ use App\Http\Controllers\Paysprint\BusTicketController;
 use App\Http\Controllers\Paysprint\DashboardController;
 use App\Http\Controllers\Paysprint\DMT2Controller;
 use App\Http\Controllers\Paysprint\FastagRechargeController;
+use App\Http\Controllers\Paysprint\FormProgressController;
 use App\Http\Controllers\Paysprint\InsurancePremiumPaymentController;
+use App\Http\Controllers\Paysprint\IpAndBankController;
 use App\Http\Controllers\Paysprint\LPGController;
 use App\Http\Controllers\Paysprint\MunicipalityController;
 use App\Http\Controllers\Paysprint\RechargeController;
 use App\Http\Controllers\Paysprint\Remitter2Controller;
+use App\Http\Controllers\Paysprint\UserFundController;
 use App\Http\Controllers\Paysprint\UtilitybillPaymentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
-
+Route::get('/onboardingUser', [FormProgressController::class, 'index']);
+Route::post('/onboarding/save-step', [FormProgressController::class, 'saveStep']);
+Route::post('/submit-onboarding-form', [FormProgressController::class, 'submit']);
+// ['auth', 'onBoard']
 Route::middleware('auth')->group(function () {
+
+    //Onboarding Process user start
+    // Route::get('/onboardingUser', [FormProgressController::class, 'index']);
+    // Route::post('/onboarding/save-step', [FormProgressController::class, 'saveStep']);
+    // Route::post('/submit-onboarding-form', [FormProgressController::class, 'submit']);
+    //Onboarding Process user end
+
     Route::get('/dashboard', function () {
         return Inertia::render('dashboard',[
             'user' => isset(auth()->user()->name) ? auth()->user()->name: ' '
         ]);
+    })->name('dashboard');
+    // Route::get('/services', function () {
+    //     return Inertia::render('Services');
+    // });
+    //Fund Route start
+    Route::get('/funRequest', function () {
+        return Inertia::render('Fundrequest');
     });
-    Route::get('/services', function () {
-        return Inertia::render('Services');
-    });
+    Route::post('/fundRequest', [UserFundController::class, 'fundRequest']);
+    
+
+    //Fund route end
     Route::get('/billPay', function () {
         return Inertia::render('Billpay');
     });
@@ -283,53 +306,56 @@ Route::post('/api/admin/remitter2/register-remitter', [Remitter2Controller::clas
 
  
 //Beneficiary 
-Route::get('/admin/beneficiary2/registerBeneficiary', [Beneficiary2Controller::class, 'registerBeneficiary'])->name('beneficiary2.registerBeneficiary');
-Route::match(['get', 'post'], '/beneficiary/register', [Beneficiary2Controller::class, 'registerBeneficiary'])->name('beneficiary.register');
-Route::post('/beneficiary/register', [Beneficiary2Controller::class, 'registerBeneficiary']);
+// Route::get('/admin/beneficiary2/registerBeneficiary', [Beneficiary2Controller::class, 'registerBeneficiary'])->name('beneficiary2.registerBeneficiary');
+// Route::match(['get', 'post'], '/beneficiary/register', [Beneficiary2Controller::class, 'registerBeneficiary'])->name('beneficiary.register');
+// Route::post('/beneficiary/register', [Beneficiary2Controller::class, 'registerBeneficiary']);
 
 
-Route::get('/admin/beneficiary2/deleteBeneficiary', [Beneficiary2Controller::class, 'deleteBeneficiary'])
-    ->name('beneficiary2.deleteBeneficiary');
-Route::post('/admin/beneficiary2/deleteBeneficiary', [Beneficiary2Controller::class, 'destroyBeneficiary'])
-    ->name('beneficiary2.destroyBeneficiary');
-    Route::get('/admin/beneficiary2/deletion-history', [Beneficiary2Controller::class, 'getDeletionHistory'])
-    ->name('beneficiary2.getDeletionHistory');
+// Route::get('/admin/beneficiary2/deleteBeneficiary', [Beneficiary2Controller::class, 'deleteBeneficiary'])
+//     ->name('beneficiary2.deleteBeneficiary');
+// Route::post('/admin/beneficiary2/deleteBeneficiary', [Beneficiary2Controller::class, 'destroyBeneficiary'])
+//     ->name('beneficiary2.destroyBeneficiary');
+//     Route::get('/admin/beneficiary2/deletion-history', [Beneficiary2Controller::class, 'getDeletionHistory'])
+//     ->name('beneficiary2.getDeletionHistory');
 
 
-Route::get('/admin/beneficiary2/fetchBeneficiary', [Beneficiary2Controller::class, 'fetchBeneficiary'])->name('beneficiary2.fetchBeneficiary');
-Route::get('/admin/beneficiary2/fetch', [Beneficiary2Controller::class, 'fetchBeneficiary'])->name('beneficiary2.fetch');
+// Route::get('/admin/beneficiary2/fetchBeneficiary', [Beneficiary2Controller::class, 'fetchBeneficiary'])->name('beneficiary2.fetchBeneficiary');
+// Route::get('/admin/beneficiary2/fetch', [Beneficiary2Controller::class, 'fetchBeneficiary'])->name('beneficiary2.fetch');
 
 
-Route::prefix('admin/beneficiary2')->group(function () {
-    Route::get('/fetchbyBenied', [Beneficiary2Controller::class, 'fetchbyBenied'])
-        ->name('beneficiary2.fetchbyBenied');
-    Route::post('/fetch-beneficiary-data', [Beneficiary2Controller::class, 'fetchBeneficiaryData'])
-        ->name('beneficiary2.fetchBeneficiaryData');
-});
+// Route::prefix('admin/beneficiary2')->group(function () {
+//     Route::get('/fetchbyBenied', [Beneficiary2Controller::class, 'fetchbyBenied'])
+//         ->name('beneficiary2.fetchbyBenied');
+//     Route::post('/fetch-beneficiary-data', [Beneficiary2Controller::class, 'fetchBeneficiaryData'])
+//         ->name('beneficiary2.fetchBeneficiaryData');
+// });
 
-//Transaction 
-Route::get('/admin/transaction2/pennyDrop', [Transaction2Controller::class, 'pennyDrop'])->name('transaction2.pennyDrop');
-Route::match(['get', 'post'], '/admin/transaction2/pennyDrop', [Transaction2Controller::class, 'pennyDrop'])->name('transaction2.pennyDrop');
+// //Transaction 
+// Route::get('/admin/transaction2/pennyDrop', [Transaction2Controller::class, 'pennyDrop'])->name('transaction2.pennyDrop');
+// Route::match(['get', 'post'], '/admin/transaction2/pennyDrop', [Transaction2Controller::class, 'pennyDrop'])->name('transaction2.pennyDrop');
 
-Route::get('/admin/transaction2/transactionSentOtp', [Transaction2Controller::class, 'transactionSentOtp'])->name('transaction2.transactionSentOtp');
-Route::match(['get', 'post'], '/transaction-sent-otp', [Transaction2Controller::class, 'transactionSentOtp'])->name('transaction.sent.otp');
+// Route::get('/admin/transaction2/transactionSentOtp', [Transaction2Controller::class, 'transactionSentOtp'])->name('transaction2.transactionSentOtp');
+// Route::match(['get', 'post'], '/transaction-sent-otp', [Transaction2Controller::class, 'transactionSentOtp'])->name('transaction.sent.otp');
 
-Route::get('/admin/transaction2/transaction', [Transaction2Controller::class, 'transaction'])->name('transaction2.transaction');
-Route::post('/admin/transaction2/transact', [Transaction2Controller::class, 'transact'])->name('transaction2.transact');
+// Route::get('/admin/transaction2/transaction', [Transaction2Controller::class, 'transaction'])->name('transaction2.transaction');
+// Route::post('/admin/transaction2/transact', [Transaction2Controller::class, 'transact'])->name('transaction2.transact');
 
-Route::get('/admin/transaction2/transactionStatus', [Transaction2Controller::class, 'transactionStatus'])->name('transaction2.transactionStatus');
-Route::post('/transaction-status', [Transaction2Controller::class, 'transactionStatus']);
+// Route::get('/admin/transaction2/transactionStatus', [Transaction2Controller::class, 'transactionStatus'])->name('transaction2.transactionStatus');
+// Route::post('/transaction-status', [Transaction2Controller::class, 'transactionStatus']);
 
 
 
-//Refund
-Route::get('/admin/refund2/refundOtp', [Refund2Controller::class, 'refundOtp'])->name('transaction2.refundOtp');
-Route::match(['get', 'post'], '/admin/refund2/refundOtp', [Refund2Controller::class, 'refundOtp'])->name('refund2.refundOtp');
+// //Refund
+// Route::get('/admin/refund2/refundOtp', [Refund2Controller::class, 'refundOtp'])->name('transaction2.refundOtp');
+// Route::match(['get', 'post'], '/admin/refund2/refundOtp', [Refund2Controller::class, 'refundOtp'])->name('refund2.refundOtp');
 
-// Route::match(['get', 'post'], '/admin/refund2/refundOtp', [Refund2Controller::class, 'refundOtp'])
-//     ->name('refund2.refundOtp');
-Route::get('/admin/refund2/claimRefund', [Refund2Controller::class, 'claimRefund'])->name('transaction2.claimRefund');
-Route::post('/admin/refund2/processRefund', [Refund2Controller::class, 'processRefund'])->name('transaction2.processRefund');
+// // Route::match(['get', 'post'], '/admin/refund2/refundOtp', [Refund2Controller::class, 'refundOtp'])
+// //     ->name('refund2.refundOtp');
+// Route::get('/admin/refund2/claimRefund', [Refund2Controller::class, 'claimRefund'])->name('transaction2.claimRefund');
+// Route::post('/admin/refund2/processRefund', [Refund2Controller::class, 'processRefund'])->name('transaction2.processRefund');
+Route::get('/user/ipwhitelist', [IpAndBankController::class, 'index'])->name('ip.whitelisting');
+Route::post('/user/ipwhitelist/add', [IpAndBankController::class, 'ipAdd'])->name('ip.add');
+Route::get('/user/ipwhitelist/fetch', [IpAndBankController::class, 'ipFetch'])->name('ip.fetch');
 
 
 
@@ -354,8 +380,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     ->name('admin.licdashboard');
     Route::post('/admin/licdata',[LicController::class,'fetchlicdata'])->name('admin.fetchlicdata');
 
-    //Another Routes for admin use only end
-
+    
 
     //permissions 
     Route::post('/admin/roles',[MainController::class,'roles'])->name('admin.roles');
@@ -379,7 +404,8 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/members', [MemberController::class, 'memberdashboard'])->name('admin.members');
     Route::post('/admin/member/fetchdetails', [MemberController::class, 'fetchmember'])->name('admin.memberdetails');
     Route::post('/admin/member/add', [MemberController::class, 'addMember'])->name('admin.member.add');
-    Route::delete('/admin/member/delete/{id}', [MemberController::class, 'deleteMember'])->name('admin.member.delete');
+    Route::get('/admin/member/delete/{id}', [MemberController::class, 'deleteMember'])->name('admin.member.delete');
+    Route::get('/admin/member/delete/reterive/{id}', [MemberController::class, 'reterivedeleteMember'])->name('admin.member.reterive');
 
     // bank details
     Route::get('/admin/bank', [BankController::class, 'bankdashboard'])->name('admin.bank');
@@ -400,9 +426,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::put('/admin/update-commission-recharge/{id}', [AdminController::class, 'updateRechargeCommission']);
 
 
-    //airtel commission
-    Route::get('/admin/cms-airtel',[CMSController::class,'cmsairteldashboard'])->name('admin.airtel');
-    Route::post('/admin/cms-airtel-fetch',[CMSController::class,'cms_airtel_fetch'])->name('admin.fetchairtel');
+    // //airtel commission
+    // Route::get('/admin/cms-airtel',[CMSController::class,'cmsairteldashboard'])->name('admin.airtel');
+    // Route::post('/admin/cms-airtel-fetch',[CMSController::class,'cms_airtel_fetch'])->name('admin.fetchairtel');
 
 
 
@@ -433,6 +459,14 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/ip-whitelisting', function () {
         return Inertia::render('AdminDashboard/ipwhitelist'); // Replace with your actual component name
     });
+    //for fund only admin can change the status after verification
+    // Route::get('/fundRequestList', [UserFundController::class, 'allFundRequestList']);
+    Route::get('/fund-requests', [UserFundController::class, 'allFundRequestList']);
+    Route::post('/fund-requests/{id}/status', [UserFundController::class, 'changeToActiveStatus']);
+    Route::post('/fund-requests/inActive/{id}/status', [UserFundController::class, 'changeToInActiveStatus']);
+
+
+    //Another Routes for admin use only end
 });
 
 
@@ -457,3 +491,44 @@ Route::get('/logincheck', [DMT2Controller::class, 'loginCheck']);
 Route::get('/unauthorized', function () {
     return Inertia::render('Unauthorized');
 })->name('unauthorized');
+Route::get('/onboarding', function () {
+    return Inertia::render('Verifyitsyou');
+})->name('onboarding');
+
+Route::get('/getonboarding', function () {
+    return Inertia::render('OnboardingPage');
+})->name('getonboarding');
+
+// Route::get('/fetchbillbbps', [BbpsController::class, 'fetchBill']);
+Route::prefix('bill')->group(function () {
+    // {type}/{biller}
+    Route::get('/billerInfo', [BbpsController::class, 'billerInfo']);
+    Route::post('/biller/{biller}', [BbpsController::class, 'billerId']);
+    Route::match(['get', 'post'],'/fetchbill', [BbpsController::class, 'fetchBill']);
+    Route::get('/fetchbill/details', [BbpsController::class, 'fetchBillDetails']);
+    Route::get('/services', [BbpsController::class, 'services']);
+    // Route::get('/services/{category}', [BbpsController::class, 'getAllOperator']);
+    Route::get('/services/list/{category}', [BbpsController::class, 'getAllOperator'])
+    ->where('category', '.*');
+    // ->where('category', '.*');
+
+    // Route::get('/test', function () {
+    //     return Inertia::render('Billfetch');
+    // })->name('getonboarding');
+    Route::get('/paybill', [BbpsController::class, 'paybill']);
+    Route::post('/billPayment', [BbpsController::class, 'billPayment']);
+    Route::post('/transactionStatus', [BbpsController::class, 'transactionStatus']);
+    Route::get('/complaintRegistration', [BbpsController::class, 'complaintRegistration']);
+    Route::post('/previousRegisteredComplaint', [BbpsController::class, 'previousRegisteredComplaint']);
+    Route::post('/billValidation', [BbpsController::class, 'billValidation']);
+    Route::get('/successfulTransactionsSms', [BbpsController::class, 'successfulTransactionsSms']);
+    Route::get('/complaintRegistrationSms', [BbpsController::class, 'complaintRegistrationSms']);
+});
+
+
+//Testing only
+
+Route::get('/api/categories', [BbpsController::class, 'getCategories']);
+Route::get('/api/operators/{category}', [BbpsController::class, 'getOperators']);
+Route::post('/api/fetch-bill', [BbpsController::class, 'fetchBills']);
+Route::post('/fetch-bill', [BbpsController::class, 'fetch']);

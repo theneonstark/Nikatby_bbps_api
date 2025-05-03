@@ -7,6 +7,7 @@ import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Dropdown } from "@/components/dropdown"
+// import Navbar from "@/Layouts/newLayout/navbar";
 
 import data from "../data.json"
 
@@ -16,6 +17,7 @@ export default function Page() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
+        {/* <Navbar /> */}
         <Dropdown />
         <div className="p-6 bg-gray-100 min-h-screen">
         <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">Main Dashboard</h1>

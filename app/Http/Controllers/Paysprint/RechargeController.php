@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Paysprint;
 
+use App\Models\FundRequest;
 use App\Models\OnboardingForm;
 use App\Models\RechargeOperator;
 use App\Models\RechargeTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -18,42 +21,71 @@ class RechargeController
     
     public function processRecharge(Request $request)
     {
+        // dd($request->all());
         try {
-            $validator = Validator::make($request->all(), [
-                'operator' => 'required',
-                'canumber' => 'required',
+          $validated = $request->validate([
+                'operator' => 'required|integer',
+                'canumber' => 'required|string',
                 'amount' => 'required|numeric|min:1',
-                'referenceid' => 'required',
-                'status' => 'required|in:pending,success,failed',
-                'message' => 'required'
+                'referenceid' => 'nullable|string'
             ]);
-        
-            if ($validator->fails()) {
-                Log::error('Validation failed:', $validator->errors()->toArray());
+            $checkBalance = FundRequest::where([
+                'user_id' => Auth::id(),
+                'status' => 1
+            ])->get()->pluck('debit_balance')->sum();
+            dd($checkBalance-233);
+            if(isset($checkBalance) && $checkBalance < 10)
+            {
                 return response()->json([
-                    'status' => false,
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
-                ], 422);
+                    'status' => true,
+                    'message' => 'Insufficient Amount.',
+                ]);
             }
-            
-            $transaction = RechargeTransaction::create($request->all());
-            
-            Log::info('Transaction created successfully:', $transaction->toArray());
-            
-            return response()->json([
-                'status' => true,
-                'message' => 'Transaction stored successfully',
-                'data' => $transaction
+
+        
+            $referenceid = $validated['referenceid'] ?? now()->timestamp;
+
+            // Call PaySprint API from backend
+            $paySprintResponse = Http::withHeaders([
+                'Authorisedkey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M',
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])->post('https://sit.paysprint.in/service-api/api/v1/service/recharge/recharge/dorecharge', [
+                'operator' => (int)$validated['operator'],
+                'canumber' => $validated['canumber'],
+                'amount' => (int)$validated['amount'],
+                'referenceid' => $referenceid,
             ]);
-            
-        } catch (\Exception $e) {
-            Log::error('Recharge processing failed: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
-            
+
+            $responseData = $paySprintResponse->json();
+            // dd($paySprintResponse);
+
+            // Optional: Save the transaction details in your database here
+            $transaction = RechargeTransaction::create([
+                'operator' => $validated['operator'],
+                'canumber' => $validated['canumber'],
+                'amount' => $validated['amount'],
+                'referenceid' => $referenceid,
+                'status' => $responseData['status'] ? 'success' : 'failed',
+                'response_code' => $responseData['response_code'] ?? '',
+                'operatorid' => $responseData['operatorid'] ?? '',
+                'ackno' => $responseData['ackno'] ?? '',
+                'message' => $responseData['message'] ?? 'Transaction processed',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
             return response()->json([
-                'status' => false,
-                'message' => 'Failed to process recharge: ' . $e->getMessage()
+                'status' => $responseData['status'] ? 'success' : 'failed',
+                'message' => $responseData['message'] ?? 'Transaction processed',
+                'api_response' => $transaction,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
