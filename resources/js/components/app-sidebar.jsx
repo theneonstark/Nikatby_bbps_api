@@ -72,11 +72,11 @@ export function AppSidebar({ ...props }) {
   };
 
   const navItems = [
-    {
-      title: "Dashboard",
-      icon: LayoutDashboardIcon,
-      url: userrole === 1 ? `${BASE_URL}/adminDashboard` : `${BASE_URL}/dashboard`,
-    },
+    // {
+    //   title: "Dashboard",
+    //   icon: LayoutDashboardIcon,
+    //   url: userrole === 1 ? `${BASE_URL}/adminDashboard` : `${BASE_URL}/dashboard`,
+    // },
     {
       title: userrole !== 1 ? "Fund Request": undefined,
       icon: HandCoins,

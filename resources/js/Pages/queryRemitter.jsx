@@ -39,7 +39,6 @@ export default function SearchRemitter() {
                 return;
             }
             const response = await axios.post('/search-remitter', { mobile });
-            
             console.log(response.data);
             // return response.data;
             if (response.data.remitter && user.verified ===  1) {

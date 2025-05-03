@@ -8,7 +8,6 @@ import { usePage, router } from "@inertiajs/react";
 const DoRechargeForm = () => {
   const { props: inertiaProps } = usePage();
   const user = inertiaProps.auth?.user;
-
   const [formData, setFormData] = useState({
     operator: "",
     canumber: "",
