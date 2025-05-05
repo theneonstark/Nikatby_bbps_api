@@ -42,6 +42,7 @@ class BbpsController extends Controller
         try{
             $requestId = \MyHelper::generateRequestId();
             $key = '2940CB60C489CEA1AD49AC96BBDC6310'; //for live bps
+            $key = '48ECC74C29EB85471E7511C54C0F310A';
             $xml = '<?xml version="1.0" encoding="UTF-8"?><billerInfoRequest><billerId>'.$billerNameId->blr_id.'</billerId></billerInfoRequest>';
             $billerId = \CJS::encrypt($xml, $key);
             $url = "https://api.billavenue.com/billpay/extMdmCntrl/mdmRequestNew/xml?accessCode=AVQU51SS09TR19KLWN&requestId=".$requestId."&ver=1.0&instituteId=RP16";
@@ -67,19 +68,21 @@ class BbpsController extends Controller
              $xmlObject = simplexml_load_string($billerInfo);
              $jsonData = json_encode($xmlObject);
              $arrayData = json_decode($jsonData, true); // Convert to associative array if needed
+            //  dd($arrayData['billerId']);
             //  dd($arrayData['agentId']);
             // dd($arrayData['biller']['billerId']);
             // $InputBillName = $arrayData['biller']['billerInputParams']['paramInfo']['paramName'];
             // $billerId = $arrayData['biller']['billerId'];
             // $min = $arrayData['biller']['billerInputParams']['paramInfo']['minLength'];
             // $max = $arrayData['biller']['billerInputParams']['paramInfo']['maxLength'];
-            dd($arrayData);
+            // dd($arrayData['inputParams']['input']);
             return Inertia::render('AllBillFetch/ProceedtofetchBill', [
-                'allData' => $arrayData['biller'],
+                // 'allData' => $arrayData['biller'],
+                'inputs' => $arrayData['inputParams']['input'] ?? [],
                 // 'feildName' => $InputBillName,
                 // 'min' => $min,
                 // 'max' => $max,
-                // 'billerId' => $billerId,
+                'billerId'  => $arrayData['billerId'] ?? null,
             ]);
             //  return response($arrayData, 200);
         }
@@ -94,6 +97,8 @@ class BbpsController extends Controller
 
     public function fetchBill(Request $request)
     {
+        // $billerId = $request->input('billerId');
+        //  $params = $request->except('billerId');
         // dd($request->all());
         // dd($request->input('billerId'));
         $request->validate([
@@ -111,12 +116,15 @@ class BbpsController extends Controller
 
         $url = 'https://api.billavenue.com/billpay/extBillCntrl/billFetchRequest/xml';
         $data = $request->all();
+        dd($data['billerId']);
         // dd($data['inputField']);
         // dd(count($data));
         // dd($data['inputField']);
         // $agentId = $data['agentId'];
         // CC01CC01513515340681
         //format
+
+        
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?><billFetchRequest><agentId>121F00000NAT4D</agentId><agentDeviceInfo><ip>124.123.183.137</ip><initChannel>AGT</initChannel><mac>01-23-45-67-89-ab</mac></agentDeviceInfo><customerInfo><customerMobile>9898990084</customerMobile><customerEmail/><customerAdhaar/><customerPan/></customerInfo><billerId>'.$data['billerId'].'</billerId><inputParams><input><paramName>'.$data['feildName'].'</paramName><paramValue>'.$data['inputField'].'</paramValue></input></inputParams></billFetchRequest>';
         // dd($xml);
