@@ -503,7 +503,7 @@ Route::get('/getonboarding', function () {
 Route::prefix('bill')->group(function () {
     // {type}/{biller}
     Route::get('/billerInfo', [BbpsController::class, 'billerInfo']);
-    Route::post('/biller/{biller}', [BbpsController::class, 'billerId']);
+    Route::match(['get', 'post'],'/biller/{biller}', [BbpsController::class, 'billerId']);
     Route::match(['get', 'post'],'/fetchbill', [BbpsController::class, 'fetchBill']);
     Route::get('/fetchbill/details', [BbpsController::class, 'fetchBillDetails']);
     Route::get('/services', [BbpsController::class, 'services']);
