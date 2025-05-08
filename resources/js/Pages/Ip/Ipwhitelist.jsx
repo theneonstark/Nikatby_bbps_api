@@ -68,7 +68,7 @@ const IPWhitelist = () => {
 
     try {
       if (editingIp) {
-        await axios.put(`/api/ip-addresses/${editingIp.id}`, {
+        await axios.put(`/user/ipEdit/${editingIp.id}`, {
           ip_address: trimmedIp,
         });
       } else {

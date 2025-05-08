@@ -541,3 +541,14 @@ export const balanceApi = {
       throw error;
     }
   };
+
+  //bbps
+  export const billFetch = async (formData) => {
+    try {
+      const response = await axios.post('/bill/fetchbill', formData);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching bill:', error);
+      throw error;
+    }
+  };

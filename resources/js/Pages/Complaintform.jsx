@@ -53,7 +53,7 @@ const ComplaintForm = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await axios.get("/bill/complaintRegistration", form); 
+        const response = await axios.post("/bill/complaintRegistration", form); 
         console.log("Response from controller:", response.data);
         // You can show success message or redirect
       } catch (error) {
@@ -140,9 +140,13 @@ const ComplaintForm = () => {
                     className="w-full p-3 border rounded-md bg-white shadow-sm"
                   >
                     <option value="">- Select -</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Failed">Failed</option>
-                    <option value="Success">Success</option>
+                    <option value="Transaction Successful account not updated">Transaction Successful account not updated</option>
+                    <option value="Amount deducted, biller account credited but transaction ID not received">Amount deducted, biller account credited but transaction ID not received</option>
+                    <option value="Amount deducted, biller account not credited & transaction ID not received">Amount deducted, biller account not credited & transaction ID not received</option>
+                    <option value="Amount deducted multiple times">Amount deducted multiple times</option>
+                    <option value="Double payment updated">Double payment updated</option>
+                    <option value="Erroneously paid in wrong account">Erroneously paid in wrong account</option>
+                    <option value="Others, provide details in description">Others, provide details in description</option>
                   </select>
                   {errors.disposition && <p className="text-red-500 text-sm">{errors.disposition}</p>}
                 </div>

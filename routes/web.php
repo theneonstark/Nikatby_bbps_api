@@ -355,6 +355,7 @@ Route::post('/api/admin/remitter2/register-remitter', [Remitter2Controller::clas
 // Route::post('/admin/refund2/processRefund', [Refund2Controller::class, 'processRefund'])->name('transaction2.processRefund');
 Route::get('/user/ipwhitelist', [IpAndBankController::class, 'index'])->name('ip.whitelisting');
 Route::post('/user/ipwhitelist/add', [IpAndBankController::class, 'ipAdd'])->name('ip.add');
+Route::put('/user/ipEdit/{id}', [IpAndBankController::class, 'editIp'])->name('ip.edit');
 Route::get('/user/ipwhitelist/fetch', [IpAndBankController::class, 'ipFetch'])->name('ip.fetch');
 
 
@@ -515,10 +516,10 @@ Route::prefix('bill')->group(function () {
     // Route::get('/test', function () {
     //     return Inertia::render('Billfetch');
     // })->name('getonboarding');
-    Route::get('/paybill', [BbpsController::class, 'paybill']);
-    Route::post('/billPayment', [BbpsController::class, 'billPayment']);
+    Route::post('/paybill', [BbpsController::class, 'paybill']);
+    // Route::post('/billPayment', [BbpsController::class, 'billPayment']);
     Route::post('/transactionStatus', [BbpsController::class, 'transactionStatus']);
-    Route::get('/complaintRegistration', [BbpsController::class, 'complaintRegistration']);
+    Route::post('/complaintRegistration', [BbpsController::class, 'complaintRegistration']);
     Route::post('/previousRegisteredComplaint', [BbpsController::class, 'previousRegisteredComplaint']);
     Route::post('/billValidation', [BbpsController::class, 'billValidation']);
     Route::get('/successfulTransactionsSms', [BbpsController::class, 'successfulTransactionsSms']);
@@ -532,3 +533,4 @@ Route::get('/api/categories', [BbpsController::class, 'getCategories']);
 Route::get('/api/operators/{category}', [BbpsController::class, 'getOperators']);
 Route::post('/api/fetch-bill', [BbpsController::class, 'fetchBills']);
 Route::post('/fetch-bill', [BbpsController::class, 'fetch']);
+Route::get('/paybillsms', [BbpsController::class, 'paybillsms']);

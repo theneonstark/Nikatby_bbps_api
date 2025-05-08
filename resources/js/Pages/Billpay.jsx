@@ -2,8 +2,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { router } from "@inertiajs/core";
-import { Inertia } from "@inertiajs/inertia";
-import axios from "axios";
+
 
 export default function BillPay({ services }) {
   // `services` here is assumed to be an array of category strings like ["Loan Repayment", "Electricity", ...]

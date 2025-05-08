@@ -40,5 +40,19 @@ class IpAndBankController extends Controller
     
         return response()->json(['success' => true]);
     }
+    public function editIp(Request $request, $id){
+        $request->validate([
+            'ip_address' => 'required|ip|unique:user_ip_adds,ip_address',
+        ]);
+        $edit = UserIpAdd::firstOrCreate(['id' => $id]);
+        if(isset($edit)){
+            $data = $request->only([
+                'ip_address'
+            ]);
+            $edit->update($data);
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false]);
+    }
     
 }
