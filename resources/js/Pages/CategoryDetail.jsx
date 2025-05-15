@@ -7,7 +7,7 @@ import { router } from '@inertiajs/core';
 
 export default function CategoryDetail({ category, services }) {
   const handleCategoryClick = (blr_name) => {
-    console.log(blr_name);
+    console.log("Biller name:",blr_name);
     
       router.post(`/bill/biller/${encodeURIComponent(blr_name)}`);  
     };

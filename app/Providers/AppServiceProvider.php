@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\CheckIpWhitelist;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\OnBoarding;
 use App\Models\FundRequest;
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        app('router')->aliasMiddleware('ip', CheckIpWhitelist::class);
         app('router')->aliasMiddleware('isAdmin', IsAdmin::class);
         app('router')->aliasMiddleware('onBoard', OnBoarding::class);
         Inertia::share([

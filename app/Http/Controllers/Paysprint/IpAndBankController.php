@@ -25,6 +25,18 @@ class IpAndBankController extends Controller
             ]);
         }
     }
+
+
+    public function ipFetchAdmin(){
+        $IpList = UserIpAdd::all();
+        if(isset($IpList)){
+            return response()->json([
+                'status' => true,
+                'data' => $IpList,
+            ]);
+        }
+    }
+
     public function ipAdd(Request $request)
     {
         // dd(Auth::id());
@@ -33,7 +45,6 @@ class IpAndBankController extends Controller
         ]);
     
         UserIpAdd::create([
-            'user_id' => Auth::id(),
             'ip_address' => $request->ip_address,
             'status' => false,
         ]);
@@ -54,5 +65,37 @@ class IpAndBankController extends Controller
         }
         return response()->json(['success' => false]);
     }
+
+    public function deleteIp($id)
+    {
+        $deleteIp = UserIpAdd::find($id);
+        // dd($deleteIp);
+        $deleteIp->delete();
+        return response()->json(['success' => true]);
+    }
+    public function ipToggle($id)
+    {
+        $toggle = UserIpAdd::find($id);
+
+        if ($toggle) {
+            // Toggle the current status (assuming it's a boolean or 1/0)
+            $toggle->status = $toggle->status ? 0 : 1;
+
+            // Save the updated status
+            $toggle->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status toggled successfully.',
+                'new_status' => $toggle->status
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Record not found.'
+        ], 404);
+    }
+
     
 }

@@ -30,7 +30,7 @@ Route::get('/onboardingUser', [FormProgressController::class, 'index']);
 Route::post('/onboarding/save-step', [FormProgressController::class, 'saveStep']);
 Route::post('/submit-onboarding-form', [FormProgressController::class, 'submit']);
 // ['auth', 'onBoard']
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','ip'])->group(function () {
 
     //Onboarding Process user start
     // Route::get('/onboardingUser', [FormProgressController::class, 'index']);
@@ -353,10 +353,11 @@ Route::post('/api/admin/remitter2/register-remitter', [Remitter2Controller::clas
 // //     ->name('refund2.refundOtp');
 // Route::get('/admin/refund2/claimRefund', [Refund2Controller::class, 'claimRefund'])->name('transaction2.claimRefund');
 // Route::post('/admin/refund2/processRefund', [Refund2Controller::class, 'processRefund'])->name('transaction2.processRefund');
-Route::get('/user/ipwhitelist', [IpAndBankController::class, 'index'])->name('ip.whitelisting');
-Route::post('/user/ipwhitelist/add', [IpAndBankController::class, 'ipAdd'])->name('ip.add');
-Route::put('/user/ipEdit/{id}', [IpAndBankController::class, 'editIp'])->name('ip.edit');
-Route::get('/user/ipwhitelist/fetch', [IpAndBankController::class, 'ipFetch'])->name('ip.fetch');
+    Route::get('/user/ipwhitelist', [IpAndBankController::class, 'index'])->name('ip.whitelisting');
+    Route::post('/user/ipwhitelist/add', [IpAndBankController::class, 'ipAdd'])->name('ip.add');
+    Route::put('/user/ipEdit/{id}', [IpAndBankController::class, 'editIp'])->name('ip.edit');
+    Route::delete('/user/ipDelete/{id}', [IpAndBankController::class, 'deleteIp'])->name('ip.delete');
+    Route::get('/user/ipwhitelist/fetch', [IpAndBankController::class, 'ipFetch'])->name('ip.fetch');
 
 
 
@@ -368,6 +369,14 @@ Route::get('/user/ipwhitelist/fetch', [IpAndBankController::class, 'ipFetch'])->
 
 //Another Routes for admin use only start
 Route::middleware(['auth', 'isAdmin'])->group(function () {
+    // ip adding whitlisting process start here 
+    Route::post('/user/ipwhitelist/add', [IpAndBankController::class, 'ipAdd'])->name('ip.add');
+    Route::put('/user/ipEdit/{id}', [IpAndBankController::class, 'editIp'])->name('ip.edit');
+    Route::delete('/user/ipDelete/{id}', [IpAndBankController::class, 'deleteIp'])->name('ip.delete');
+    Route::get('/ipFetchAdmin/fetch', [IpAndBankController::class, 'ipFetchAdmin'])->name('ip.ipFetchAdmin');
+    Route::put('/ipToggle/fetch/{id}', [IpAndBankController::class, 'ipToggle'])->name('ip.toggle');
+    // ip adding whitlisting process end here 
+
     Route::get('/adminDashboard',[AdminController::class,'dashboard'])->name('admin.recharge');
     Route::get('/admin/rechargeDashboard',[AdminController::class,'recharge'])->name('admin.recharge');
 
@@ -517,6 +526,7 @@ Route::prefix('bill')->group(function () {
     //     return Inertia::render('Billfetch');
     // })->name('getonboarding');
     Route::post('/paybill', [BbpsController::class, 'paybill']);
+    Route::get('/receipt', [BbpsController::class, 'receipt']);
     // Route::post('/billPayment', [BbpsController::class, 'billPayment']);
     Route::post('/transactionStatus', [BbpsController::class, 'transactionStatus']);
     Route::post('/complaintRegistration', [BbpsController::class, 'complaintRegistration']);

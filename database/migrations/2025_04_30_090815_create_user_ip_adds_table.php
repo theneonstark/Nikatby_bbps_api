@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_ip_adds', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->unique()->onDelete('cascade');
+            // $table->foreignId('user_id')->constrained()->unique()->onDelete('cascade');
             $table->string('ip_address')->unique();
             $table->boolean('status')->default(true); // true = active, false = inactive
             $table->timestamps();

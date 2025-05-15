@@ -2,18 +2,18 @@
 export const Dropdown = () => {
     const handleChange = (event) => {
       const value = event.target.value;
-  
+  // /userpanel3/public
       if (value === "DMT2") {
-        window.location.href = "/userpanel3/public/dmt2/dashboard";
+        window.location.href = "/dmt2/dashboard";
       } else if (value === "Bus Booking") {
-        window.location.href = "/userpanel3/public/bus-booking/dashboard";
+        window.location.href = "/bus-booking/dashboard";
       } else if (value === "Recharge") {
-        window.location.href = "/userpanel3/public/recharge/dashboard";
+        window.location.href = "/recharge/dashboard";
       } else if (value === "Utilities") {
-        window.location.href = "/userpanel3/public/utilities/dashboard";
+        window.location.href = "/utilities/dashboard";
       } else if (value === "Main Dashboard")
       {
-        window.location.href = "/userpanel3/public/dashboard";
+        window.location.href = "/dashboard";
       }
     };
   

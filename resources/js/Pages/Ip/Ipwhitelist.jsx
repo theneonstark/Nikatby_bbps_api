@@ -87,7 +87,7 @@ const IPWhitelist = () => {
     if (!confirm('Are you sure you want to delete this IP address?')) return;
 
     try {
-      await axios.delete(`/api/ip-addresses/${id}`);
+      await axios.delete(`/user/ipDelete/${id}`);
       fetchIPs();
     } catch (error) {
       console.error('Error deleting IP address:', error);
@@ -101,16 +101,16 @@ const IPWhitelist = () => {
     setError('');
   };
 
-  const handleStatusToggle = async (id, currentStatus) => {
-    try {
-      await axios.put(`/api/ip-addresses/${id}/status`, {
-        status: currentStatus ? 0 : 1,
-      });
-      fetchIPs();
-    } catch (error) {
-      console.error('Error toggling IP status:', error);
-    }
-  };
+  // const handleStatusToggle = async (id, currentStatus) => {
+  //   try {
+  //     await axios.put(`/api/ip-addresses/${id}/status`, {
+  //       status: currentStatus ? 0 : 1,
+  //     });
+  //     fetchIPs();
+  //   } catch (error) {
+  //     console.error('Error toggling IP status:', error);
+  //   }
+  // };
 
   const closeModal = () => {
     setModalOpen(false);
@@ -131,7 +131,7 @@ const IPWhitelist = () => {
         <div className="w-full h-full py-10 px-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">IP Whitelist</h1>
-            <Button
+            {/* <Button
               onClick={() => {
                 setModalOpen(true);
                 setError('');
@@ -140,7 +140,7 @@ const IPWhitelist = () => {
               }}
             >
               + Add IP
-            </Button>
+            </Button> */}
           </div>
 
           <div className="rounded-md border overflow-x-auto">
@@ -149,7 +149,7 @@ const IPWhitelist = () => {
                 <tr>
                   <th className="px-4 py-2">IP Address</th>
                   <th className="px-4 py-2">Status</th>
-                  <th className="px-4 py-2">Actions</th>
+                  {/* <th className="px-4 py-2">Actions</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -171,7 +171,7 @@ const IPWhitelist = () => {
                         />
                         {/* <span className={ip.status == 1 ? "mt-4 text-green-700" : "mt-4 text-red-700 text font-bold"} >{ip.status == 1 ? 'Active' : 'Inactive'}</span> */}
                       </td>
-                      <td className="px-4 py-2 space-x-2">
+                      {/* <td className="px-4 py-2 space-x-2">
                         <Button size="sm" variant="outline" onClick={() => handleEdit(ip)}>
                           Edit
                         </Button>
@@ -182,7 +182,7 @@ const IPWhitelist = () => {
                         >
                           Delete
                         </Button>
-                      </td>
+                      </td> */}
                     </tr>
                   ))
                 )}
